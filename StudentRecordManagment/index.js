@@ -1,42 +1,102 @@
 import express from 'express';
+import fs from 'fs';
 
 const app = express();
 const port = 3000;
+const DATA_FILE = 'data.txt';
 
 app.use(express.json());
 
-const students = [];
+let students = [];
+
+
+if (fs.existsSync(DATA_FILE)) {
+  try {
+    const fileData = fs.readFileSync(DATA_FILE, 'utf-8');
+    students = JSON.parse(fileData);
+
+
+    if (!Array.isArray(students)) {
+      students = [];
+    }
+  } catch (err) {
+    console.error('Failed to read data file, starting empty:', err);
+    students = [];
+  }
+}
+
+
+function saveToFile() {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(students, null, 2));
+}
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Student Record Management System');
 });
 
+
+
 app.post('/students', (req, res) => {
-  const { id, name, email, age, course } = req.body;
+  let { id, name, email, age, course } = req.body;
+
+
+  if (
+    id === undefined ||
+    name === undefined ||
+    email === undefined ||
+    age === undefined ||
+    course === undefined
+  ) {
+    return res.status(400).send('All fields (id, name, email, age, course) are required');
+  }
+
+  id = parseInt(id, 10);
+  age = parseInt(age, 10);
+
+  if (Number.isNaN(id) || Number.isNaN(age)) {
+    return res.status(400).send('ID and age must be numbers');
+  }
+
+  if (students.find(s => s.id === id)) {
+    return res.status(400).send('Student with this ID already exists');
+  }
 
   const student = { id, name, email, age, course };
   students.push(student);
 
-  res.status(201).send('Student record created');
+  saveToFile();
+
+  res.status(201).json(student); 
 });
+
 
 app.get('/students', (req, res) => {
   res.json(students);
 });
 
+
 app.get('/students/:id', (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
+  if (Number.isNaN(id)) {
+    return res.status(400).send('Invalid ID');
+  }
+
   const student = students.find(s => s.id === id);
 
   if (!student) {
-    return res.status(404).send('Student not found Please check the ID and try again');
+    return res.status(404).send('Student not found');
   }
 
   res.json(student);
 });
 
+
 app.put('/students/:id', (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
+  if (Number.isNaN(id)) {
+    return res.status(400).send('Invalid ID');
+  }
+
   const student = students.find(s => s.id === id);
 
   if (!student) {
@@ -44,24 +104,42 @@ app.put('/students/:id', (req, res) => {
   }
 
   const { name, email, age, course } = req.body;
-  student.name = name;
-  student.email = email;
-  student.age = age;
-  student.course = course;
 
-  res.send('Student updated');
+  if (name !== undefined) student.name = name;
+  if (email !== undefined) student.email = email;
+
+  if (age !== undefined) {
+    const parsedAge = parseInt(age, 10);
+    if (Number.isNaN(parsedAge)) {
+      return res.status(400).send('Age must be a number');
+    }
+    student.age = parsedAge;
+  }
+
+  if (course !== undefined) student.course = course;
+
+  saveToFile();
+
+  res.json(student); 
 });
 
 app.delete('/students/:id', (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
+  if (Number.isNaN(id)) {
+    return res.status(400).send('Invalid ID');
+  }
+
   const index = students.findIndex(s => s.id === id);
 
   if (index === -1) {
     return res.status(404).send('Student not found');
   }
 
-  students.splice(index, 1);
-  res.send('Student deleted');
+  const removed = students.splice(index, 1)[0];
+
+  saveToFile();
+
+  res.json(removed);
 });
 
 app.listen(port, () => {

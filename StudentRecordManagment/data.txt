@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Vikash",
+    "email": "Vikash07raj",
+    "age": 25,
+    "course": "Btech"
+  },
+  {
+    "id": 2,
+    "name": "Prithvi",
+    "email": "Prithvi07raj",
+    "age": 25,
+    "course": "Btech"
+  }
+]
