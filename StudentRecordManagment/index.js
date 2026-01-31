@@ -29,7 +29,7 @@ app.get('/students/:id', (req, res) => {
   const student = students.find(s => s.id === id);
 
   if (!student) {
-    return res.status(404).send('Student not found Please check the ID');
+    return res.status(404).send('Student not found Please check the ID and try again');
   }
 
   res.json(student);
