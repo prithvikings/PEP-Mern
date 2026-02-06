@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Complaint Tracker</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>📢 Complaint Tracker</h1>
+    <p>Submit your complaint and we will review it shortly.</p>
+
+    <form action="/api/complaints" method="POST">
+      <input
+        type="text"
+        name="title"
+        placeholder="Enter complaint title..."
+        required
+      />
+
+      <textarea
+        name="description"
+        placeholder="Describe your issue clearly..."
+        required
+      ></textarea>
+
+      <button type="submit">Submit Complaint</button>
+    </form>
+
+    <a href="/admin">➡ Go to Admin Dashboard</a>
+  </div>
+</body>
+</html>

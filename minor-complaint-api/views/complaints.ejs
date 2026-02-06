@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Complaints</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>📄 Complaint List</h1>
+    <p>All complaints submitted so far are shown below.</p>
+
+    <div id="complaints"></div>
+
+    <a href="/">⬅ Back to Complaint Form</a>
+  </div>
+
+  <script>
+    async function loadComplaints() {
+      const res = await fetch("/api/complaints");
+      const complaints = await res.json();
+
+      const container = document.getElementById("complaints");
+      container.innerHTML = "";
+
+      if (complaints.length === 0) {
+        container.innerHTML = "<p>No complaints submitted yet.</p>";
+        return;
+      }
+
+      complaints.forEach(c => {
+        container.innerHTML += `
+          <div class="card">
+            <h3>${c.title}</h3>
+            <p>${c.description}</p>
+
+            <span class="badge ${c.status}">
+              ${c.status.toUpperCase()}
+            </span>
+          </div>
+        `;
+      });
+    }
+
+    loadComplaints();
+  </script>
+</body>
+</html>

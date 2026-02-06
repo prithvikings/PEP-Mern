@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>🛠 Admin Dashboard</h1>
+    <p>Manage all submitted complaints below.</p>
+
+    <div id="complaints"></div>
+
+    <a href="/">⬅ Back to User Page</a>
+  </div>
+
+  <script>
+    async function loadComplaints() {
+      const res = await fetch("/api/complaints")
+;
+      const complaints = await res.json();
+
+      const container = document.getElementById("complaints");
+      container.innerHTML = "";
+
+      if (complaints.length === 0) {
+        container.innerHTML = "<p>No complaints yet.</p>";
+        return;
+      }
+
+      complaints.forEach(c => {
+        container.innerHTML += `
+          <div class="card">
+            <h3>${c.title}</h3>
+            <p>${c.description}</p>
+
+            <span class="badge ${c.status}">
+              ${c.status.toUpperCase()}
+            </span>
+
+            <div class="actions">
+              <button onclick="resolve(${c.id})">
+                Resolve
+              </button>
+
+              <button class="danger" onclick="removeComplaint(${c.id})">
+                Delete
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function resolve(id) {
+      await fetch(`/api/complaints/${id}/resolve`, {
+        method: "PUT"
+      });
+
+      loadComplaints();
+    }
+
+    async function removeComplaint(id) {
+      await fetch(`/api/complaints/${id}`, {
+        method: "DELETE"
+      });
+
+      loadComplaints();
+    }
+
+    // Auto-load when page opens
+    loadComplaints();
+  </script>
+</body>
+</html>
