@@ -2,12 +2,29 @@
 <html>
 <head>
   <title>Complaint Tracker</title>
-  <link rel="stylesheet" href="/style.css">
+  <!-- <link rel="stylesheet" href="/style.css"> -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <body>
-  <div class="container">
-    <h1>📢 Complaint Tracker</h1>
+  <main class="min-h-screen bg-gray-100">
+    <nav class="max-w-7xl mx-auto">
+      <div class="logo">ComplaintFetch</div>
+      <ul>
+        <li class="complaints">Complaints</li>
+        <li class="admin">Admin Dashboard</li>
+      </ul>
+    </nav>
+  </main>
+</body>
+</html>
+
+
+<!-- /api/complaints -->
+ <!-- "/admin" -->
+<!-- 
+   <div class="container">
+    <h1 class="text-4xl">📢 Complaint Tracker</h1>
     <p>Submit your complaint and we will review it shortly.</p>
 
     <form action="/api/complaints" method="POST">
@@ -26,8 +43,7 @@
 
       <button type="submit">Submit Complaint</button>
     </form>
+    <button class="btn">Go to complaint page</button>
 
     <a href="/admin">➡ Go to Admin Dashboard</a>
-  </div>
-</body>
-</html>
+  </div> -->
