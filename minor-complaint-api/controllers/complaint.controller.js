@@ -1,12 +1,12 @@
 let complaints = [];
 let idCounter = 1;
 
-// GET all complaints
 export const getAllComplaints = (req, res) => {
   res.json(complaints);
 };
 
-// POST create complaint
+
+
 export const createComplaint = (req, res) => {
   const { title, description } = req.body;
 
@@ -18,13 +18,14 @@ export const createComplaint = (req, res) => {
     id: idCounter++,
     title,
     description,
-    status: "open"
+    status: "pending"
   };
 
   complaints.push(newComplaint);
 
-  res.redirect("/complaints");
+ res.redirect("/complaints");
 };
+
 
 // PUT resolve complaint
 export const resolveComplaint = (req, res) => {

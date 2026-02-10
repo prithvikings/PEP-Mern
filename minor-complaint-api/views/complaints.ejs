@@ -122,8 +122,9 @@
         container.innerHTML = "";
 
         const openComplaints = complaints.filter(
-          (c) => c.status === "open"
-        ).length;
+  (c) => c.status === "pending"
+).length;
+
 
         const closedComplaints = complaints.filter(
           (c) => c.status === "resolved"
