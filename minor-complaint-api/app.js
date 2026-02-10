@@ -4,15 +4,12 @@ import loggerMiddleware from "./middleware/logger.middleware.js";
 
 const app = express();
 
-// View Engine Setup
 app.set("view engine", "ejs");
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(loggerMiddleware);
 
-// Static Files
 app.use(express.static("public"));
 
 // API Routes
