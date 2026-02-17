@@ -15,6 +15,7 @@ import passportConfig from './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
 import confessionRoutes from './routes/confessionRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 // Initialize DB
 connectDB();
@@ -54,6 +55,7 @@ app.use(passport.session());
 app.use('/auth', authRoutes);
 app.use('/confessions', confessionRoutes);
 app.use('/admin', adminRoutes);
+app.use('/users', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 

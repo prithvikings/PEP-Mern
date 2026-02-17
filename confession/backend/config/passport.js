@@ -1,11 +1,12 @@
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import User from '../models/user.models.js'; // Added .js extension
+import User from '../models/user.models.js';
 
 export default function(passport) {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback'
+    // FIX: Use the full, absolute URL
+    callbackURL: 'http://localhost:5000/auth/google/callback' 
   },
   async (accessToken, refreshToken, profile, done) => {
     try {

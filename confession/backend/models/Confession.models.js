@@ -22,15 +22,16 @@ const ConfessionSchema = new mongoose.Schema({
     enum: ['College', 'Relationships', 'Family', 'Funny', 'Dark', 'Mental Health', 'Other'],
     default: ['Other']
   },
-  reactions: {
-    like: { type: Number, default: 0 },
-    love: { type: Number, default: 0 },
-    laugh: { type: Number, default: 0 }
-  },
-  reactionHistory: [
+  // NEW: Voting System
+  score: { type: Number, default: 0 }, // Useful for sorting (upvotes - downvotes)
+  upvotes: { type: Number, default: 0 },
+  downvotes: { type: Number, default: 0 },
+  
+  // Track user votes: [{ userId: '123', vote: 1 }] (1 = up, -1 = down)
+  voteHistory: [
     {
       userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      type: { type: String, enum: ['like', 'love', 'laugh'] }
+      vote: { type: Number, enum: [1, -1] } // 1 for Up, -1 for Down
     }
   ],
   views: { type: Number, default: 0 },
@@ -44,7 +45,8 @@ const ConfessionSchema = new mongoose.Schema({
   isHidden: { type: Boolean, default: false }, 
 }, { timestamps: true });
 
+// Index for sorting by Score (Trending/Popular)
+ConfessionSchema.index({ score: -1 });
 ConfessionSchema.index({ createdAt: -1 });
-ConfessionSchema.index({ 'reactions.like': -1 });
 
 export default mongoose.model('Confession', ConfessionSchema);

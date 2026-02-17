@@ -19,10 +19,9 @@ export const getConfessions = async (req, res) => {
     
     if (tag) query.tags = tag;
 
-    let sortOption = { createdAt: -1 }; 
-    if (sort === 'popular') sortOption = { 'reactions.like': -1 };
+let sortOption = { createdAt: -1 }; 
+    if (sort === 'popular') sortOption = { score: -1 }; // CHANGED to score
     if (sort === 'oldest') sortOption = { createdAt: 1 };
-
     const confessions = await Confession.find(query)
       .sort(sortOption)
       .limit(limit * 1)
@@ -65,43 +64,84 @@ export const createConfession = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
-
-export const reactToConfession = async (req, res) => {
+// @desc    Vote on confession (Up/Down) with "Floor 0" Logic
+// @route   POST /confessions/:id/vote
+export const voteConfession = async (req, res) => {
   try {
-    const { type } = req.body; 
-    if (!['like', 'love', 'laugh'].includes(type)) {
-      return res.status(400).json({ message: 'Invalid reaction type' });
+    const { type } = req.body; // 'up' or 'down'
+    if (!['up', 'down'].includes(type)) {
+      return res.status(400).json({ message: 'Invalid vote type' });
     }
 
     const confession = await Confession.findById(req.params.id);
     if (!confession) return res.status(404).json({ message: 'Confession not found' });
 
-    const existingReactionIndex = confession.reactionHistory.findIndex(
-      (r) => r.userId.toString() === req.user.id
+    const userId = req.user.id;
+    const voteValue = type === 'up' ? 1 : -1;
+
+    // Check existing vote
+    const existingVoteIndex = confession.voteHistory.findIndex(
+      (v) => v.userId.toString() === userId
     );
 
-    if (existingReactionIndex !== -1) {
-      const oldType = confession.reactionHistory[existingReactionIndex].type;
-      confession.reactions[oldType] = Math.max(0, confession.reactions[oldType] - 1);
-      
-      if (oldType === type) {
-        confession.reactionHistory.splice(existingReactionIndex, 1);
+    if (existingVoteIndex !== -1) {
+      // --- USER HAS VOTED BEFORE ---
+      const previousVote = confession.voteHistory[existingVoteIndex].vote;
+
+      if (previousVote === voteValue) {
+        // 1. TOGGLE OFF (Remove vote)
+        // e.g., Click Up when already Upvoted -> Remove Up
+        confession.voteHistory.splice(existingVoteIndex, 1);
+        if (voteValue === 1) confession.upvotes = Math.max(0, confession.upvotes - 1);
+        else confession.downvotes = Math.max(0, confession.downvotes - 1);
+
       } else {
-        confession.reactions[type] += 1;
-        confession.reactionHistory[existingReactionIndex].type = type;
+        // 2. SWITCH VOTE (Swap)
+        // e.g., Click Down when Upvoted
+        confession.voteHistory[existingVoteIndex].vote = voteValue;
+        if (voteValue === 1) {
+          // Switch Down -> Up
+          confession.upvotes++;
+          confession.downvotes = Math.max(0, confession.downvotes - 1);
+        } else {
+          // Switch Up -> Down
+          confession.upvotes = Math.max(0, confession.upvotes - 1);
+          confession.downvotes++;
+        }
       }
     } else {
-      confession.reactions[type] += 1;
-      confession.reactionHistory.push({ userId: req.user.id, type });
+      // --- NEW VOTE ---
+      // 3. ADD NEW VOTE
+      confession.voteHistory.push({ userId, vote: voteValue });
+      if (voteValue === 1) confession.upvotes++;
+      else confession.downvotes++;
+    }
+
+    // --- CRITICAL LOGIC: PREVENT NEGATIVE SCORE ---
+    // Recalculate score before saving
+    confession.score = confession.upvotes - confession.downvotes;
+
+    if (confession.score < 0) {
+      // If the action resulted in a negative score, we REJECT it.
+      // We do not save. The user's vote is effectively ignored.
+      return res.status(400).json({ message: 'Score cannot go below zero.' });
     }
 
     await confession.save();
-    res.json(confession.reactions);
+    
+    res.json({ 
+      score: confession.score, 
+      upvotes: confession.upvotes, 
+      downvotes: confession.downvotes 
+    });
+
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server Error' });
   }
 };
 
+// ... keep other functions ...
 export const editConfession = async (req, res) => {
   try {
     const { secretCode, text } = req.body;

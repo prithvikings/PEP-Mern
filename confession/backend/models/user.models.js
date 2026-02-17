@@ -7,8 +7,9 @@ const UserSchema = new mongoose.Schema({
   avatar: { type: String },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   isBanned: { type: Boolean, default: false },
+  // NEW: Track saved posts
+  savedConfessions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Confession' }],
   createdAt: { type: Date, default: Date.now },
 });
 
-// Use export default
 export default mongoose.model('User', UserSchema);
