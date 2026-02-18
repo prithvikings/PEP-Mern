@@ -1,19 +1,30 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import Home from './pages/Home';
-import Profile from './pages/Profile'; // Import the new page
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AppLayout } from "./components/layout/AppLayout";
+import { HomeFeed } from "./pages/HomeFeed";
+import { PostDetails } from "./pages/PostDetails";
+import { MyWhispers } from "./pages/MyWhispers";
+import { Notifications } from "./pages/Notifications";
+import { TrendingTea } from "./pages/TrendingTea";
+import { Saved } from "./pages/Saved";
+import { Settings } from "./pages/Settings";
+import { ThemeProvider } from "./context/ThemeContext";
 
-function App() {
+export default function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <ThemeProvider>
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} /> {/* Add this line */}
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<HomeFeed />} />
+            <Route path="/confession/:id" element={<PostDetails />} />
+            <Route path="/my-whispers" element={<MyWhispers />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/trending" element={<TrendingTea />} />
+            <Route path="/saved" element={<Saved />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
         </Routes>
-      </Router>
-    </AuthProvider>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
-
-export default App;
