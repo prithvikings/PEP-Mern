@@ -4,9 +4,8 @@ import { TOPICS } from "../../data/mockData";
 export function RightPanel() {
   return (
     <aside className="w-full flex-shrink-0 hidden xl:flex flex-col border-l border-linear-border bg-linear-bg h-screen p-5 overflow-y-auto sticky top-0">
-      {/* Trending */}
       <div className="mb-8">
-        <h2 className="text-linear-text font-semibold text-xs uppercase tracking-wider mb-4 text-linear-text-muted">
+        <h2 className="text-linear-text font-medium text-xs tracking-wider mb-4 text-linear-text-muted">
           Trending Topics
         </h2>
         <div className="flex flex-col gap-1">

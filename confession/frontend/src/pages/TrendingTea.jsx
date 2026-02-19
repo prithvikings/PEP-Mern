@@ -1,141 +1,183 @@
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Added import
 import {
   Search,
   Command,
   ChevronDown,
-  MoreHorizontal,
-  Heart,
-  MessageSquare,
-  Share2,
   Coffee,
   Briefcase,
   Smartphone,
   Dog,
 } from "lucide-react";
+
+import { ArrowBigUpIcon } from "../components/ui/arrow-big-up";
+import { ArrowBigDownIcon } from "../components/ui/arrow-big-down";
+import { MessageCircleIcon } from "../components/ui/message-circle";
+import { SendIcon as ShareIcon } from "../components/ui/send-icon";
+import { CircleDollarSignIcon } from "../components/ui/circle-dollar-sign";
+
 import { TRENDING_POSTS } from "../data/mockData";
 import { cn } from "../lib/utils";
+import { PostOptionsMenu } from "../components/modals/post-options-menu";
 
-// Icon mapping to match your reference image style
-const getIcon = (iconName) => {
+// IMPORT THIS FROM YOUR NEW FILE. DO NOT DECLARE IT HERE.
+import { InteractiveAction } from "../components/ui/interactive-action";
+
+const getIconData = (iconName) => {
   switch (iconName) {
     case "Coffee":
-      return <Coffee size={14} />;
+      return {
+        icon: <Coffee size={14} />,
+        theme:
+          "text-orange-600 dark:text-orange-400 bg-orange-500/10 border-orange-500/20",
+      };
     case "Briefcase":
-      return <Briefcase size={14} />;
+      return {
+        icon: <Briefcase size={14} />,
+        theme:
+          "text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/20",
+      };
     case "Smartphone":
-      return <Smartphone size={14} />;
+      return {
+        icon: <Smartphone size={14} />,
+        theme:
+          "text-purple-600 dark:text-purple-400 bg-purple-500/10 border-purple-500/20",
+      };
     case "Dog":
-      return <Dog size={14} />;
+      return {
+        icon: <Dog size={14} />,
+        theme:
+          "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+      };
     default:
-      return <Coffee size={14} />;
+      return {
+        icon: <Coffee size={14} />,
+        theme:
+          "text-linear-text-muted bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10",
+      };
   }
 };
 
 export function TrendingTea() {
+  const navigate = useNavigate(); // Initialized hook
+
   return (
-    <div className="min-h-screen bg-linear-bg text-linear-text font-sans">
-      {/* Search & Filter Header */}
-      <div className="sticky top-0 z-20 bg-linear-bg/95 backdrop-blur-xl border-b border-linear-border">
-        <div className="px-6 pt-6 pb-4">
-          {/* Search Input */}
-          <div className="relative mb-6">
+    <div className="min-h-screen bg-linear-bg text-linear-text font-sans selection:bg-black/10 dark:selection:bg-white/20">
+      <div className="sticky top-0 z-20 bg-linear-bg/90 backdrop-blur-xl border-b border-linear-border font-poppins">
+        <div className="px-5 pt-5 pb-4">
+          <div className="relative mb-5">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-linear-text-muted"
               size={16}
             />
             <input
               type="text"
               placeholder="Search for secrets, tags, or keywords..."
-              className="w-full bg-linear-surface/50 border border-linear-border rounded-lg py-2.5 pl-10 pr-12 text-sm text-linear-text focus:outline-none focus:ring-1 focus:ring-linear-border transition-all placeholder:text-zinc-600 shadow-sm"
+              className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-md py-2 pl-9 pr-12 text-[13px] text-linear-text focus:outline-none focus:border-black/30 dark:focus:border-white/30 transition-all placeholder:text-linear-text-muted/60"
             />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 border border-linear-border rounded px-1.5 py-0.5 flex items-center gap-1 bg-linear-surface">
-              <Command size={10} className="text-zinc-500" />
-              <span className="text-[10px] font-medium text-zinc-500">K</span>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 border border-black/10 dark:border-white/10 rounded-sm px-1.5 py-0.5 flex items-center gap-1 bg-black/5 dark:bg-white/5">
+              <Command size={10} className="text-linear-text-muted" />
+              <span className="text-[10px] font-medium text-linear-text-muted font-sans">
+                K
+              </span>
             </div>
           </div>
 
-          {/* Filter Bar */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <span className="text-[11px] font-bold text-linear-text-muted uppercase tracking-wider">
-                Filter By:
-              </span>
-              <div className="flex gap-1">
-                {["All", "Funny", "Work", "Relationships", "Embarrassing"].map(
-                  (filter, i) => (
-                    <button
-                      key={filter}
-                      className={cn(
-                        "px-3 py-1 text-[13px] font-medium rounded-md transition-all",
-                        i === 0
-                          ? "bg-linear-surface text-linear-text border border-linear-border shadow-sm"
-                          : "text-linear-text-muted hover:text-linear-text hover:bg-white/5",
-                      )}
-                    >
-                      {filter}
-                    </button>
-                  ),
-                )}
-              </div>
+          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar">
+            <div className="flex gap-1.5 shrink-0">
+              {["All", "Funny", "Work", "Relationships", "Embarrassing"].map(
+                (filter, i) => (
+                  <button
+                    key={filter}
+                    className={cn(
+                      "px-3 py-1 text-[12px] font-medium rounded-md transition-all border",
+                      i === 0
+                        ? "bg-black/5 dark:bg-white/10 text-linear-text border-black/10 dark:border-white/10 shadow-sm"
+                        : "text-linear-text-muted border-transparent hover:text-linear-text hover:bg-black/5 dark:hover:bg-white/5",
+                    )}
+                  >
+                    {filter}
+                  </button>
+                ),
+              )}
             </div>
-
-            <button className="flex items-center gap-1.5 text-[13px] font-medium text-linear-text-muted hover:text-linear-text transition-colors">
-              <span>Sort by: Trending</span>
-              <ChevronDown size={14} />
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Feed List */}
-      <div className="p-6 pb-20">
-        <h2 className="text-xs font-bold text-linear-text-muted uppercase tracking-wider mb-4">
-          Trending Confessions
-        </h2>
+      <div className="p-5 pb-24">
+        <div className="flex flex-col gap-3">
+          {TRENDING_POSTS.map((post) => {
+            const iconData = getIconData(post.icon);
 
-        <div className="flex flex-col gap-4">
-          {TRENDING_POSTS.map((post) => (
-            <div
-              key={post.id}
-              className="group relative p-5 rounded-xl border border-linear-border bg-transparent hover:bg-linear-surface/30 transition-all duration-200 cursor-pointer"
-            >
-              {/* Top Row: Icon + Author + Menu */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2 text-linear-text-muted">
-                  <span className="text-zinc-500">{getIcon(post.icon)}</span>
-                  <span className="text-[12px] font-medium">{post.author}</span>
+            return (
+              <div
+                key={post.id}
+                onClick={() => navigate(`/confession/${post.id}`)} // Added navigation
+                className="group relative p-5 rounded-lg border border-linear-border bg-linear-bg hover:bg-black/[0.02] dark:hover:bg-white/[0.02] hover:border-black/20 dark:hover:border-white/20 transition-all duration-200 cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2 text-linear-text-muted">
+                    <div
+                      className={cn(
+                        "flex items-center justify-center size-6 rounded-sm border",
+                        iconData.theme,
+                      )}
+                    >
+                      {iconData.icon}
+                    </div>
+                    <span className="text-[12px] font-medium text-linear-text">
+                      {post.author}
+                    </span>
+                  </div>
+                  <PostOptionsMenu
+                    postId={post.id}
+                    isOwnPost={post.author === "Ghost User #99"}
+                  />
                 </div>
-                <button className="text-zinc-600 hover:text-linear-text transition-colors opacity-0 group-hover:opacity-100">
-                  <MoreHorizontal size={16} />
-                </button>
-              </div>
 
-              {/* Content */}
-              <p className="text-[15px] text-linear-text/90 leading-relaxed font-normal mb-4">
-                {post.content}
-              </p>
+                <p className="text-[13px] text-linear-text/90 leading-relaxed font-poppins mb-5">
+                  {post.content}
+                </p>
 
-              {/* Bottom Row: Interactions */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-5">
-                  <button className="flex items-center gap-1.5 text-zinc-500 hover:text-rose-400 transition-colors group/btn">
-                    <Heart
-                      size={16}
-                      className="group-hover/btn:fill-rose-500/20"
+                <div className="flex items-center justify-between pt-3 border-t border-linear-border/50">
+                  <div className="flex items-center gap-5">
+                    <div className="flex items-center gap-3 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-full px-3 py-1">
+                      <InteractiveAction
+                        icon={ArrowBigUpIcon}
+                        label={post.likes}
+                        hoverTextClass="hover:text-rose-500 dark:hover:text-rose-400"
+                        iconHoverClass="group-hover:fill-rose-500/20"
+                      />
+                      <div className="w-px h-3 bg-black/10 dark:bg-white/10" />
+                      <InteractiveAction
+                        icon={ArrowBigDownIcon}
+                        label={post.dislikes || 0}
+                        hoverTextClass="hover:text-blue-500 dark:hover:text-blue-400"
+                        iconHoverClass="group-hover:fill-blue-500/20"
+                      />
+                    </div>
+
+                    <InteractiveAction
+                      icon={MessageCircleIcon}
+                      label={post.comments}
+                      hoverTextClass="hover:text-indigo-500 dark:hover:text-indigo-400"
                     />
-                    <span className="text-xs font-medium">{post.likes}</span>
-                  </button>
-                  <button className="flex items-center gap-1.5 text-zinc-500 hover:text-indigo-400 transition-colors">
-                    <MessageSquare size={16} />
-                    <span className="text-xs font-medium">{post.comments}</span>
-                  </button>
-                </div>
+                    <InteractiveAction
+                      icon={CircleDollarSignIcon}
+                      label={post.comments}
+                      hoverTextClass="hover:text-green-500 dark:hover:text-green-400"
+                    />
+                  </div>
 
-                <button className="text-zinc-600 hover:text-linear-text transition-colors">
-                  <Share2 size={16} />
-                </button>
+                  <InteractiveAction
+                    icon={ShareIcon}
+                    hoverTextClass="hover:text-linear-text"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

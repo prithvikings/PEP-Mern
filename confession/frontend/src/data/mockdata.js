@@ -22,8 +22,10 @@ export const CONFESSIONS = [
     content:
       "I secretly water my coworker's fake plant every day just to see if they notice. It's been 6 months and today they told me \"it looks healthier lately\". I almost choked on my coffee.",
     likes: "1.2k",
+    dislikes: "3.4k",
     comments: 45,
     avatarColor: "bg-zinc-700",
+    dollarCoin: 10,
   },
   {
     id: 2,
@@ -33,9 +35,11 @@ export const CONFESSIONS = [
     content:
       "Found out my ex is dating my professor. Monday lecture is going to be incredibly awkward, especially since I sit in the front row. Should I drop the class?",
     likes: 890,
+    dislikes: 120,
     comments: 120,
     reaction: "Haha (56)",
     avatarColor: "bg-zinc-800",
+    dollarCoin: 5,
   },
   {
     id: 3,
@@ -45,8 +49,10 @@ export const CONFESSIONS = [
       "Sometimes I feel like everyone else got a manual for how to be an adult and I'm just winging it based on sitcoms I watched in the 90s.",
     tag: "DeepThoughts",
     likes: "3.4k",
+    dislikes: 210,
     comments: 210,
     avatarColor: "bg-indigo-900",
+    dollarCoin: 12,
   },
   {
     id: 4,
@@ -56,9 +62,11 @@ export const CONFESSIONS = [
       "I interviewed at a competitor company today during my \"doctor's appointment\". They offered me a 30% raise on the spot. I haven't told my current boss yet but I'm smiling too much.",
     tag: "Spiciest",
     likes: "5.1k",
+    dislikes: 405,
     comments: 405,
     reaction: "Secure bag (112)",
     avatarColor: "bg-red-900",
+    dollarCoin: 23,
   },
 ];
 
@@ -70,9 +78,19 @@ export const THREAD_DATA = {
   time: "2 hours ago",
   content:
     "I secretly water my boss's fake plants every morning just to see if anyone notices the water overflowing. It's been six months.",
+
   tags: ["WorkLife", "Confession"],
-  stats: { likes: "1.4k", comments: 45 },
+
+  // ✅ Updated stats to match frontend
+  stats: {
+    likes: 1400,
+    dislikes: 120,
+    comments: 45,
+    dollarCoin: 8,
+  },
+
   isTrending: true,
+
   comments: [
     {
       id: "c1",
@@ -80,7 +98,10 @@ export const THREAD_DATA = {
       time: "1h ago",
       content:
         "This is chaotic good energy at its finest. Does the water evaporate or just spill onto the carpet?",
+
+      // ✅ Comment votes
       votes: 124,
+
       replies: [
         {
           id: "c1-r1",
@@ -89,10 +110,12 @@ export const THREAD_DATA = {
           time: "58m ago",
           content:
             "It has a fake dirt base that is surprisingly absorbent. I'm waiting for the mold to start. It's a science experiment now.",
+
           votes: 89,
         },
       ],
     },
+
     {
       id: "c2",
       author: "Corporate Cat #03",
@@ -100,6 +123,7 @@ export const THREAD_DATA = {
       content: "As a boss, I'm now looking at my ficus with suspicion. 👀",
       votes: 56,
     },
+
     {
       id: "c3",
       author: "Jaded Janitor #99",
@@ -158,6 +182,39 @@ export const MY_WHISPERS = [
     ],
     createdAt: "1 month ago",
   },
+  {
+    id: "2p3o4i",
+    content: "I eat my roommate's leftovers and blame the cat.",
+    status: "Public",
+    views: 3450,
+    reactions: [
+      { emoji: "😡", count: 12 },
+      { emoji: "😂", count: 405 },
+    ],
+    createdAt: "3 month ago",
+  },
+  {
+    id: "2p3o4i",
+    content: "I eat my roommate's leftovers and blame the cat.",
+    status: "Public",
+    views: 3450,
+    reactions: [
+      { emoji: "😡", count: 12 },
+      { emoji: "😂", count: 405 },
+    ],
+    createdAt: "4 month ago",
+  },
+  {
+    id: "2p3o4i",
+    content: "I eat my roommate's leftovers and blame the cat.",
+    status: "Public",
+    views: 3450,
+    reactions: [
+      { emoji: "😡", count: 12 },
+      { emoji: "😂", count: 405 },
+    ],
+    createdAt: "5 month ago",
+  },
 ];
 
 export const NOTIFICATIONS = [
@@ -213,7 +270,7 @@ export const TRENDING_POSTS = [
     id: "t1",
     author: "Work • 2h ago",
     content:
-      "I put decaf in the office pot today and watched the chaos unfold. It was purely for scientific observation, obviously.",
+      "I put decaf in the office pot today and watched the chaos unfold. It was purely for scientific observation, obviously.I put decaf in the office pot today and watched the chaos unfold. It was purely for scientific observation, obviously.",
     likes: 45,
     comments: 12,
     icon: "Coffee", // We will map this to a Lucide icon

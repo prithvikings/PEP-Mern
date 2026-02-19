@@ -1,44 +1,58 @@
-import {
-  Search,
-  Plus,
-  BarChart2,
-  MoreHorizontal,
-  Lock,
-  Globe,
-} from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Search, Plus, BarChart2, Lock, Globe } from "lucide-react";
 import { MY_WHISPERS } from "../data/mockData";
 import { cn } from "../lib/utils";
 import { CreateConfessionModal } from "../components/modals/CreateConfessionModal";
+import { PostOptionsMenu } from "../components/modals/post-options-menu";
 
 export function MyWhispers() {
+  const navigate = useNavigate();
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
+
+  // Derived Pagination Logic
+  const totalItems = MY_WHISPERS.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  // Slice the mock data for the current page
+  const currentWhispers = MY_WHISPERS.slice(startIndex, endIndex);
+
   return (
-    <div className="min-h-screen bg-linear-bg text-linear-text font-sans">
+    <div className="min-h-screen bg-linear-bg text-linear-text font-sans selection:bg-black/10 dark:selection:bg-white/20">
       {/* Header Section */}
-      <div className="sticky top-0 z-20 bg-linear-bg/80 backdrop-blur-md border-b border-linear-border px-8 py-5 flex items-center justify-between">
+      <div className="sticky top-0 z-20 bg-linear-bg/90 backdrop-blur-xl border-b border-linear-border px-8 py-5 flex items-center justify-between font-poppins">
         <div className="flex items-center gap-4">
-          <h1 className="text-lg font-semibold tracking-tight">My Whispers</h1>
-          <span className="bg-linear-surface border border-linear-border text-linear-text-muted text-xs px-2.5 py-0.5 rounded-full font-medium">
-            12 active
+          <h1 className="text-[15px] font-semibold tracking-tight">
+            My Whispers
+          </h1>
+          <span className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-linear-text-muted text-[11px] px-2 py-0.5 rounded-sm font-medium tracking-wide">
+            {totalItems} ACTIVE
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <div className="relative group">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-linear-text-muted transition-colors group-focus-within:text-linear-text"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-linear-text-muted transition-colors"
               size={14}
             />
             <input
               type="text"
               placeholder="Search your secrets..."
-              className="w-64 bg-linear-surface border border-linear-border rounded-md py-1.5 pl-9 pr-8 text-xs text-linear-text focus:outline-none focus:ring-1 focus:ring-linear-border focus:border-linear-text-muted transition-all placeholder:text-zinc-600"
+              className="w-64 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-md py-1.5 pl-8 pr-8 text-[13px] text-linear-text focus:outline-none focus:border-black/30 dark:focus:border-white/30 transition-all placeholder:text-linear-text-muted/60"
             />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-zinc-600 border border-linear-border px-1 py-px rounded bg-black/20">
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-medium text-linear-text-muted border border-black/10 dark:border-white/10 px-1 py-px rounded-sm bg-black/5 dark:bg-white/5">
               ⌘K
             </div>
           </div>
+
           <CreateConfessionModal>
-            <button className="flex items-center gap-2 bg-linear-primary hover:bg-linear-primary-hover text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all shadow-sm">
+            <button className="flex items-center gap-1.5 bg-linear-text text-linear-bg hover:opacity-90 px-3 py-1.5 rounded-md text-[13px] font-medium transition-opacity shadow-sm cursor-pointer">
               <Plus size={14} />
               New Secret
             </button>
@@ -48,9 +62,9 @@ export function MyWhispers() {
 
       {/* Table Content */}
       <div className="p-8">
-        <div className="border border-linear-border rounded-lg overflow-hidden bg-transparent">
+        <div className="border border-linear-border rounded-lg overflow-hidden bg-linear-bg shadow-sm">
           {/* Table Header */}
-          <div className="grid grid-cols-[3fr_1fr_1fr_1fr_0.5fr] gap-4 px-6 py-3 border-b border-linear-border bg-linear-surface/30 text-[11px] font-semibold text-linear-text-muted uppercase tracking-wider">
+          <div className="grid grid-cols-[3fr_1fr_1fr_1fr_0.5fr] gap-4 px-6 py-3 border-b border-linear-border bg-black/[0.02] dark:bg-white/[0.02] text-[11px] font-semibold text-linear-text-muted uppercase tracking-wider">
             <div>Confession</div>
             <div>Views</div>
             <div>Reactions</div>
@@ -60,35 +74,36 @@ export function MyWhispers() {
 
           {/* Table Rows */}
           <div className="divide-y divide-linear-border/50">
-            {MY_WHISPERS.map((item) => (
+            {currentWhispers.map((item) => (
               <div
                 key={item.id}
-                className="grid grid-cols-[3fr_1fr_1fr_1fr_0.5fr] gap-4 px-6 py-4 items-center hover:bg-linear-surface/40 transition-colors group cursor-default"
+                onClick={() => navigate(`/confession/${item.id}`)}
+                className="grid grid-cols-[3fr_1fr_1fr_1fr_0.5fr] gap-4 px-6 py-4 items-center hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors group cursor-pointer"
               >
                 {/* Content Column */}
-                <div className="pr-8">
-                  <p className="text-[13px] font-medium text-linear-text truncate mb-1.5">
+                <div className="pr-8 min-w-0">
+                  <p className="text-[13px] font-medium text-linear-text line-clamp-2 mb-1.5 font-poppins">
                     {item.content}
                   </p>
-                  <div className="flex items-center gap-2 text-[11px] text-linear-text-muted">
-                    <span className="font-mono text-zinc-600">
+                  <div className="flex items-center gap-2 text-[11px] text-linear-text-muted mt-2">
+                    <span className="font-mono bg-black/5 dark:bg-white/5 px-1 rounded-sm">
                       ID: {item.id}
                     </span>
-                    <span className="w-0.5 h-0.5 rounded-full bg-zinc-600" />
+                    <span className="w-1 h-1 rounded-full bg-linear-text-muted/50" />
                     <div className="flex items-center gap-1.5">
                       {item.status === "Public" ? (
-                        <Globe size={10} className="text-zinc-500" />
+                        <Globe size={12} className="opacity-70" />
                       ) : (
-                        <Lock size={10} className="text-zinc-500" />
+                        <Lock size={12} className="opacity-70" />
                       )}
-                      <span>{item.status}</span>
+                      <span className="font-medium">{item.status}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Views Column */}
                 <div className="flex items-center gap-2 text-[13px] text-linear-text-muted tabular-nums">
-                  <BarChart2 size={14} className="text-zinc-600" />
+                  <BarChart2 size={14} className="opacity-70" />
                   {item.views.toLocaleString()}
                 </div>
 
@@ -97,7 +112,7 @@ export function MyWhispers() {
                   {item.reactions.map((r, i) => (
                     <div
                       key={i}
-                      className="flex items-center gap-1.5 bg-linear-surface border border-linear-border px-2 py-0.5 rounded text-[11px] text-linear-text-muted"
+                      className="flex items-center gap-1.5 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 px-2 py-0.5 rounded-sm text-[11px] text-linear-text-muted"
                     >
                       <span className="opacity-80 grayscale group-hover:grayscale-0 transition-all">
                         {r.emoji}
@@ -108,30 +123,43 @@ export function MyWhispers() {
                 </div>
 
                 {/* Created Column */}
-                <div className="text-[12px] text-linear-text-muted">
+                <div className="text-[12px] text-linear-text-muted font-medium">
                   {item.createdAt}
                 </div>
 
                 {/* Actions Column */}
-                <div className="flex justify-end">
-                  <button className="p-1.5 text-zinc-500 hover:text-linear-text hover:bg-white/5 rounded transition-colors opacity-0 group-hover:opacity-100">
-                    <MoreHorizontal size={16} />
-                  </button>
+                <div className="flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                  <PostOptionsMenu postId={item.id} isOwnPost={true} />
                 </div>
               </div>
             ))}
           </div>
 
           {/* Table Footer / Pagination */}
-          <div className="px-6 py-3 border-t border-linear-border bg-linear-surface/20 flex items-center justify-between">
-            <span className="text-[11px] text-linear-text-muted">
-              Showing 1-5 of 12 secrets
+          <div className="px-6 py-3 border-t border-linear-border bg-black/[0.02] dark:bg-white/[0.02] flex items-center justify-between">
+            <span className="text-[11px] font-medium text-linear-text-muted">
+              Showing {totalItems > 0 ? startIndex + 1 : 0}-
+              {Math.min(endIndex, totalItems)} of {totalItems} secrets
             </span>
             <div className="flex items-center gap-2">
-              <button className="px-3 py-1 text-[11px] font-medium border border-linear-border rounded text-linear-text-muted hover:text-linear-text hover:bg-white/5 transition-colors disabled:opacity-50">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentPage((prev) => Math.max(prev - 1, 1));
+                }}
+                disabled={currentPage === 1}
+                className="px-3 py-1.5 text-[11px] font-medium border border-linear-border rounded-md text-linear-text-muted hover:text-linear-text hover:bg-black/5 dark:hover:bg-white/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 Previous
               </button>
-              <button className="px-3 py-1 text-[11px] font-medium border border-linear-border rounded text-linear-text-muted hover:text-linear-text hover:bg-white/5 transition-colors">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                }}
+                disabled={currentPage === totalPages || totalItems === 0}
+                className="px-3 py-1.5 text-[11px] font-medium border border-linear-border rounded-md text-linear-text-muted hover:text-linear-text hover:bg-black/5 dark:hover:bg-white/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 Next
               </button>
             </div>
