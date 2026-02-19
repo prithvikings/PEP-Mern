@@ -7,6 +7,7 @@ import { Flame } from "../ui/flame";
 import { MessageCircleIcon } from "../ui/message-circle";
 import { BellIcon } from "../ui/bell";
 import { BookmarkIcon } from "../ui/bookmark";
+import WalletIcon from "../ui/wallet-icon";
 
 import { cn } from "../../lib/utils";
 import { CreateConfessionModal } from "../modals/CreateConfessionModal";
@@ -31,6 +32,7 @@ export function Sidebar() {
       count: 3,
     },
     { icon: BookmarkIcon, label: "Saved", path: "/saved" },
+    { icon: WalletIcon, label: "Wallet", path: "/wallet" },
   ];
 
   const isActive = (path) => {

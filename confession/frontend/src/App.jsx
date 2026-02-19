@@ -7,13 +7,21 @@ import { Notifications } from "./pages/Notifications";
 import { TrendingTea } from "./pages/TrendingTea";
 import { Saved } from "./pages/Saved";
 import { Settings } from "./pages/Settings";
+import { Login } from "./pages/Login";
+import { Onboarding } from "./pages/Onboarding";
 import { ThemeProvider } from "./context/ThemeContext";
+import { Wallet } from "./pages/Wallet";
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
+          {/* Public / Fullscreen Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+
+          {/* App Layout Routes (Eventually, wrap this in a ProtectedRoute) */}
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomeFeed />} />
             <Route path="/confession/:id" element={<PostDetails />} />
@@ -22,6 +30,7 @@ export default function App() {
             <Route path="/trending" element={<TrendingTea />} />
             <Route path="/saved" element={<Saved />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/wallet" element={<Wallet />} />
           </Route>
         </Routes>
       </BrowserRouter>

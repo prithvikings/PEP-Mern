@@ -1,31 +1,33 @@
 import { ArrowRight, Trophy, Ghost } from "lucide-react";
 import { TOPICS } from "../../data/mockData";
+import { cn } from "../../lib/utils";
 
 export function RightPanel() {
   return (
-    <aside className="w-full flex-shrink-0 hidden xl:flex flex-col border-l border-linear-border bg-linear-bg h-screen p-5 overflow-y-auto sticky top-0">
-      <div className="mb-8">
-        <h2 className="text-linear-text font-medium text-xs tracking-wider mb-4 text-linear-text-muted">
+    <aside className="w-full max-w-[320px] flex-shrink-0 hidden xl:flex flex-col border-l border-linear-border bg-linear-bg h-screen p-6 overflow-y-auto sticky top-0 selection:bg-black/10 dark:selection:bg-white/20">
+      {/* Trending Topics */}
+      <div className="mb-10">
+        <h2 className="text-[11px] font-semibold uppercase tracking-wider mb-3 text-linear-text-muted font-poppins">
           Trending Topics
         </h2>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           {TOPICS.map((topic) => (
             <a
               key={topic.tag}
               href="#"
-              className="flex justify-between items-center group py-2 px-2 -mx-2 rounded hover:bg-white/5 transition-colors"
+              className="flex justify-between items-center group py-2.5 px-3 -mx-3 rounded-md hover:bg-black/[0.03] dark:hover:bg-white/[0.03] transition-colors"
             >
-              <div>
-                <p className="text-linear-text text-[13px] font-medium group-hover:text-white transition-colors">
-                  {topic.tag}
-                </p>
-                <p className="text-linear-text-muted text-[11px]">
-                  {topic.count}
-                </p>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-linear-text text-[13px] font-medium transition-colors">
+                  #{topic.tag}
+                </span>
+                <span className="text-linear-text-muted text-[11px]">
+                  {topic.count} posts
+                </span>
               </div>
               <ArrowRight
                 size={14}
-                className="text-zinc-700 group-hover:text-zinc-400"
+                className="text-linear-text-muted opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-linear-text transition-all duration-200 ease-out"
               />
             </a>
           ))}
@@ -33,44 +35,51 @@ export function RightPanel() {
       </div>
 
       {/* Daily Top */}
-      <div className="bg-linear-surface/40 rounded-lg p-4 border border-linear-border mb-8">
-        <div className="flex items-center gap-2 mb-2">
-          <Trophy size={12} className="text-yellow-500/80" />
-          <span className="text-[10px] font-bold text-linear-text-muted uppercase tracking-wider">
-            Daily Top
-          </span>
-        </div>
-        <p className="text-linear-text/90 text-[13px] leading-relaxed italic mb-3">
-          "My roommate thinks our apartment is haunted. It's me moving things
-          slightly to the left."
-        </p>
-        <div className="flex items-center gap-2">
-          <div className="size-5 rounded bg-zinc-800 flex items-center justify-center text-[10px] text-white">
-            <Ghost size={12} />
+      <div className="mb-10">
+        <div className="bg-black/[0.02] dark:bg-white/[0.02] rounded-xl p-5 border border-linear-border group cursor-pointer hover:border-black/20 dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-all duration-200">
+          <div className="flex items-center gap-2.5 mb-3">
+            <Trophy size={14} className="text-yellow-500 drop-shadow-sm" />
+            <span className="text-[11px] font-bold text-linear-text-muted uppercase tracking-wider font-poppins">
+              Daily Top
+            </span>
           </div>
-          <span className="text-[11px] text-linear-text-muted">
-            Spooky Ghost #404
-          </span>
+          <p className="text-linear-text/90 text-[13px] leading-relaxed italic mb-5">
+            "My roommate thinks our apartment is haunted. It's me moving things
+            slightly to the left."
+          </p>
+          <div className="flex items-center gap-3">
+            <div className="size-6 rounded-md bg-black/5 dark:bg-white/5 flex items-center justify-center text-linear-text-muted border border-black/10 dark:border-white/10">
+              <Ghost size={12} />
+            </div>
+            <span className="text-[12px] font-medium text-linear-text">
+              Spooky Ghost #404
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Suggested */}
       <div>
-        <h2 className="text-linear-text font-semibold text-xs uppercase tracking-wider mb-4 text-linear-text-muted">
-          Suggested
+        <h2 className="text-[11px] font-semibold uppercase tracking-wider mb-4 text-linear-text-muted font-poppins">
+          Suggested Accounts
         </h2>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           {["Gossip Queen", "Tech Insider"].map((name) => (
-            <div key={name} className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="size-6 rounded bg-zinc-800 flex items-center justify-center border border-zinc-700 text-zinc-400">
-                  <div className="size-2 bg-zinc-500 rounded-full" />
+            <div key={name} className="flex items-center justify-between group">
+              <div className="flex items-center gap-3">
+                <div className="size-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center border border-black/10 dark:border-white/10 text-linear-text-muted text-[13px] font-bold font-poppins">
+                  {name.charAt(0)}
                 </div>
-                <span className="text-[12px] text-linear-text font-medium">
-                  {name}
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-[13px] text-linear-text font-medium group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors cursor-pointer">
+                    {name}
+                  </span>
+                  <span className="text-[11px] text-linear-text-muted">
+                    Suggested for you
+                  </span>
+                </div>
               </div>
-              <button className="text-linear-text-muted hover:text-white text-[10px] font-medium border border-linear-border px-2 py-1 rounded hover:bg-white/5 transition-all cursor-pointer">
+              <button className="text-linear-text text-[11px] font-semibold border border-black/10 dark:border-white/10 px-3 py-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
                 Follow
               </button>
             </div>

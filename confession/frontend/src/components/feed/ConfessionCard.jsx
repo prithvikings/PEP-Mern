@@ -116,12 +116,6 @@ export function ConfessionCard({ data }) {
             />
           </div>
         </div>
-
-        {data.reaction && (
-          <div className="flex items-center gap-1 text-linear-text-muted text-[11px] font-medium">
-            {data.reaction}
-          </div>
-        )}
       </div>
     </div>
   );
