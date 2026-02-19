@@ -26,7 +26,6 @@ export function ResetCodeModal({ children }) {
 
     setIsSubmitting(true);
     try {
-      // Endpoint logic based on your userController/auth setup
       await api.put("/users/me/reset-secret", { secretCode: finalCode });
       alert("Security code updated successfully.");
       setOpen(false);
@@ -47,7 +46,6 @@ export function ResetCodeModal({ children }) {
           aria-describedby={undefined}
           className="fixed left-[50%] top-[50%] z-[1000] w-[calc(100%-2rem)] max-w-[400px] translate-x-[-50%] translate-y-[-50%] overflow-hidden border border-linear-border bg-linear-bg shadow-[0_32px_64px_-12px_rgba(0,0,0,0.2)] rounded-xl font-sans outline-none animate-in zoom-in-95 duration-200"
         >
-          {/* Subtle Security Gradient Header */}
           <div className="h-1.5 bg-gradient-to-r from-transparent via-linear-text/10 to-transparent w-full" />
 
           <div className="p-8">

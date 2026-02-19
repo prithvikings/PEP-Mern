@@ -22,7 +22,6 @@ const bookmarkSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// Prevent duplicate saves of the same confession in the same collection
 bookmarkSchema.index(
   { userId: 1, confessionId: 1, collectionId: 1 },
   { unique: true },

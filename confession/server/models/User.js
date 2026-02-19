@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     avatarSeed: { type: String },
     interests: [{ type: String }],
     coinsBalance: { type: Number, default: 0, min: 0 },
-    globalSecretCode: { type: String, select: false }, // Hashed
+    globalSecretCode: { type: String, select: false },
   },
   { timestamps: true },
 );

@@ -15,7 +15,6 @@ import { cn } from "../lib/utils";
 import { NotificationSettingsModal } from "../components/modals/NotificationSettingsModal";
 import { TriangleAlertIcon } from "../components/ui/triangle-alert-icon";
 
-// Centralized icon and theme mapping
 const getNotificationStyle = (type) => {
   switch (type) {
     case "like":
@@ -63,7 +62,6 @@ export function Notifications() {
 
   return (
     <div className="min-h-screen bg-linear-bg text-linear-text font-sans selection:bg-black/10 dark:selection:bg-white/20">
-      {/* Header */}
       <div className="sticky top-0 z-20 bg-linear-bg/90 backdrop-blur-xl border-b border-linear-border px-6 py-5 flex items-center justify-between font-poppins">
         <div className="flex items-center gap-4">
           <h1 className="text-[15px] font-semibold tracking-tight">Activity</h1>
@@ -80,7 +78,6 @@ export function Notifications() {
       </div>
 
       <div className="max-w-3xl mx-auto p-6 pb-24">
-        {/* Inline Warning Banner */}
         {showWarning && (
           <div className="mb-6 flex items-start gap-3 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 relative animate-in fade-in slide-in-from-top-2">
             <TriangleAlertIcon
@@ -106,7 +103,6 @@ export function Notifications() {
           </div>
         )}
 
-        {/* Enclosed List to give it structure */}
         <div className="border border-linear-border rounded-lg bg-linear-bg overflow-hidden shadow-sm">
           <div className="divide-y divide-linear-border/50">
             {NOTIFICATIONS.map((item) => {
@@ -122,7 +118,6 @@ export function Notifications() {
                       : "bg-transparent",
                   )}
                 >
-                  {/* Icon Column */}
                   <div className="pt-0.5 shrink-0">
                     <div
                       className={cn(
@@ -134,7 +129,6 @@ export function Notifications() {
                     </div>
                   </div>
 
-                  {/* Content Column */}
                   <div className="flex-1 min-w-0 pr-4">
                     <p className="text-[13px] leading-relaxed font-poppins">
                       <span className="font-semibold text-linear-text">
@@ -152,7 +146,6 @@ export function Notifications() {
                     </p>
                   </div>
 
-                  {/* Unread Indicator */}
                   {item.unread && (
                     <div className="flex items-center justify-center pl-2 shrink-0">
                       <div className="size-2 bg-blue-500 dark:bg-blue-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
@@ -164,7 +157,6 @@ export function Notifications() {
           </div>
         </div>
 
-        {/* Footer Settings Link */}
         <div className="mt-6 flex justify-center">
           <NotificationSettingsModal>
             <button className="flex items-center gap-2 text-[12px] font-medium text-linear-text-muted hover:text-linear-text transition-colors px-4 py-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer">

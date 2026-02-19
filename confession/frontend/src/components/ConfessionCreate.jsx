@@ -14,7 +14,6 @@ export function CreateConfessionModal() {
     newCode[index] = value;
     setCode(newCode);
 
-    // Auto-focus next input
     if (value && index < 3) {
       const nextInput = document.getElementById(`code-${index + 1}`);
       nextInput?.focus();
@@ -25,7 +24,6 @@ export function CreateConfessionModal() {
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 z-50" />
       <Dialog.Content className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-linear-border bg-linear-bg p-0 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
-        {/* Header */}
         <div className="flex items-center justify-between border-b border-linear-border px-6 py-4">
           <Dialog.Title className="text-lg font-semibold text-linear-text">
             Create Confession
@@ -39,9 +37,7 @@ export function CreateConfessionModal() {
           </Dialog.Close>
         </div>
 
-        {/* Body */}
         <div className="px-6 py-4 space-y-6">
-          {/* Topic */}
           <div>
             <label className="text-xs font-bold text-linear-text-muted uppercase tracking-wider mb-3 block">
               TOPIC
@@ -64,7 +60,6 @@ export function CreateConfessionModal() {
             </div>
           </div>
 
-          {/* Content */}
           <div>
             <div className="flex justify-between items-center mb-3">
               <label className="text-sm font-medium text-linear-text">
@@ -88,7 +83,6 @@ export function CreateConfessionModal() {
             </div>
           </div>
 
-          {/* Deletion Code */}
           <div>
             <label className="text-sm font-medium text-linear-text mb-3 block">
               Deletion Code
@@ -124,7 +118,6 @@ export function CreateConfessionModal() {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex items-center justify-between border-t border-linear-border px-6 py-4 bg-linear-surface/30">
           <Dialog.Close asChild>
             <button className="px-4 py-2 text-sm font-medium text-linear-text-muted hover:text-linear-text transition-colors">

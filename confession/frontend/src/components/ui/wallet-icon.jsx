@@ -9,14 +9,12 @@ const WalletIcon = forwardRef(
     const [scope, animate] = useAnimate();
 
     const start = async () => {
-      // Flap opens outward
       animate(
         ".flap",
         { rotateY: 25, x: 2 },
         { duration: 0.4, ease: "easeOut" },
       );
 
-      // Wallet expands slightly
       animate(
         ".wallet-body",
         { scale: 1.05 },

@@ -1,6 +1,7 @@
-import Confession from "../models/Confession.js";
-import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
+import Confession from "../models/Confession.js";
+import Bookmark from "../models/Bookmark.js";
+import Transaction from "../models/Transaction.js";
 import AppError from "../utils/AppError.js";
 
 export const getMyWhispers = async (req, res) => {
@@ -32,7 +33,6 @@ export const spendCoins = async (req, res) => {
     throw new AppError("Valid action and positive amount required", 400);
   }
 
-  // Atomic deduction preventing negative balance race conditions
   const updatedUser = await User.findOneAndUpdate(
     { _id: req.user._id, coinsBalance: { $gte: amount } },
     { $inc: { coinsBalance: -amount } },
@@ -63,7 +63,6 @@ export const completeOnboarding = async (req, res) => {
     throw new AppError("User is already onboarded", 400);
   }
 
-  // Check if alias is already taken by someone else
   const existingAlias = await User.findOne({ alias });
   if (existingAlias) {
     throw new AppError(
@@ -79,7 +78,7 @@ export const completeOnboarding = async (req, res) => {
       avatarSeed,
       interests,
       isOnboarded: true,
-      coinsBalance: 10, // Give them a starting balance as a welcome gift
+      coinsBalance: 10,
     },
     { new: true, runValidators: true },
   );
@@ -94,14 +93,12 @@ export const completeOnboarding = async (req, res) => {
 export const deleteAccount = async (req, res) => {
   const userId = req.user._id;
 
-  // 1. Delete all user data
   await Promise.all([
     Confession.deleteMany({ authorId: userId }),
     Bookmark.deleteMany({ userId: userId }),
     User.findByIdAndDelete(userId),
   ]);
 
-  // 2. Clear Cookie
   res.cookie("jwt", "", { expires: new Date(0) });
 
   res.status(200).json({ success: true, message: "Account deleted" });

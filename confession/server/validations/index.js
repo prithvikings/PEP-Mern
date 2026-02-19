@@ -19,7 +19,7 @@ export const createConfessionSchema = z
       .length(4, "Must be exactly 4 characters")
       .regex(/^\d{4}$/, "Must be a 4-digit number"),
   })
-  .strict(); // .strict() ensures no extra payload fields are allowed
+  .strict();
 
 export const updateConfessionSchema = z
   .object({

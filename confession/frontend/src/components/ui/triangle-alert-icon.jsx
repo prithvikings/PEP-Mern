@@ -102,5 +102,4 @@ const TriangleAlertIcon = forwardRef(
 );
 
 TriangleAlertIcon.displayName = "TriangleAlertIcon";
-// Remove export default TriangleAlertIcon; and use:
 export { TriangleAlertIcon };

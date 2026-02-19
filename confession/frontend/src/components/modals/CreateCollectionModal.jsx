@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, FolderPlus, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { api } from "../../lib/api"; // Ensure this path is correct
+import { api } from "../../lib/api";
 import { cn } from "../../lib/utils";
 
 export function CreateCollectionModal({ children }) {
@@ -15,8 +15,6 @@ export function CreateCollectionModal({ children }) {
 
     setIsSubmitting(true);
     try {
-      // Backend route: POST /collections
-      // Body: { name, description }
       const response = await api.post("/collections", {
         name: name.trim(),
         description: description.trim(),
@@ -27,7 +25,6 @@ export function CreateCollectionModal({ children }) {
         setName("");
         setDescription("");
 
-        // Refresh the page to update the UI across components
         window.location.reload();
       }
     } catch (error) {
@@ -49,7 +46,6 @@ export function CreateCollectionModal({ children }) {
         <Dialog.Overlay className="fixed inset-0 bg-black/50 dark:bg-black/80 backdrop-blur-sm z-50 animate-in fade-in duration-200" />
 
         <Dialog.Content className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-md translate-x-[-50%] translate-y-[-50%] gap-0 border border-linear-border bg-linear-bg shadow-2xl duration-200 animate-in zoom-in-95 sm:rounded-xl overflow-hidden font-sans selection:bg-black/10 dark:selection:bg-white/20 outline-none">
-          {/* Header */}
           <div className="flex items-center justify-between border-b border-linear-border px-6 py-4 bg-linear-bg">
             <Dialog.Title className="text-[15px] font-semibold tracking-tight text-linear-text flex items-center gap-2 font-poppins">
               <FolderPlus size={16} className="text-linear-text-muted" />
@@ -64,7 +60,6 @@ export function CreateCollectionModal({ children }) {
             </Dialog.Close>
           </div>
 
-          {/* Body */}
           <div className="p-6 bg-linear-bg space-y-4">
             <div>
               <label className="text-[11px] font-semibold text-linear-text-muted uppercase tracking-wider mb-2 block">
@@ -96,7 +91,6 @@ export function CreateCollectionModal({ children }) {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-end gap-3 border-t border-linear-border px-6 py-4 bg-black/[0.02] dark:bg-white/[0.02]">
             <Dialog.Close asChild>
               <button

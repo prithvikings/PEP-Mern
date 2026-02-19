@@ -11,7 +11,6 @@ export function SaveToCollectionModal({ postId, open, onOpenChange }) {
   const [privateNote, setPrivateNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // New state for inline creation
   const [showCreateInput, setShowCreateInput] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
 
@@ -44,7 +43,7 @@ export function SaveToCollectionModal({ postId, open, onOpenChange }) {
       });
       if (data.success) {
         setCollections([...collections, data.data]);
-        setSelectedCollection(data.data._id); // Auto-select the new one
+        setSelectedCollection(data.data._id);
         setShowCreateInput(false);
         setNewCollectionName("");
       }
@@ -110,7 +109,6 @@ export function SaveToCollectionModal({ postId, open, onOpenChange }) {
                 </button>
               </div>
 
-              {/* Inline Create Input - Neutral Theme */}
               {showCreateInput && (
                 <div className="flex gap-2 mb-2 animate-in slide-in-from-top-1">
                   <input

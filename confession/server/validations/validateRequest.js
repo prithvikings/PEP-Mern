@@ -13,7 +13,6 @@ export const validateBody = (schema) => {
       });
     }
 
-    // Replace req.body with the sanitized data (strips unexpected fields)
     req.body = result.data;
     next();
   };

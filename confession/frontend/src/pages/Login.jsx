@@ -9,12 +9,10 @@ export function Login() {
   return (
     <div className="min-h-screen bg-linear-bg text-linear-text flex items-center justify-center p-6 selection:bg-black/10 dark:selection:bg-white/20 font-sans">
       <div className="w-full max-w-sm flex flex-col items-center">
-        {/* Logo */}
         <div className="size-12 rounded-xl bg-linear-text text-linear-bg flex items-center justify-center mb-6 shadow-lg">
           <Coffee size={24} strokeWidth={2.5} />
         </div>
 
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold tracking-tight font-poppins mb-2">
             Welcome to TeaTeller
@@ -24,7 +22,6 @@ export function Login() {
           </p>
         </div>
 
-        {/* Auth Box */}
         <div className="w-full p-6 rounded-2xl border border-linear-border bg-black/[0.02] dark:bg-white/[0.02] shadow-sm mb-6">
           <button
             onClick={handleGoogleLogin}
@@ -52,7 +49,6 @@ export function Login() {
           </button>
         </div>
 
-        {/* Privacy Assurance */}
         <div className="flex items-start gap-3 max-w-xs bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg text-emerald-600 dark:text-emerald-400">
           <ShieldCheck size={16} className="mt-0.5 shrink-0" />
           <p className="text-[11px] leading-relaxed font-medium">

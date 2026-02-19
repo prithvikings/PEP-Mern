@@ -34,7 +34,6 @@ export function SavedFilterModal({ children }) {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-[2px] z-50 animate-in fade-in duration-300" />
         <Dialog.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-[360px] translate-x-[-50%] translate-y-[-50%] border border-linear-border bg-linear-bg shadow-2xl duration-300 animate-in zoom-in-95 sm:rounded-xl overflow-hidden font-sans outline-none">
-          {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-linear-border bg-black/[0.01] dark:bg-white/[0.01]">
             <div className="flex items-center gap-2.5">
               <div className="p-1.5 rounded-md bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
@@ -50,7 +49,6 @@ export function SavedFilterModal({ children }) {
           </div>
 
           <div className="p-5 space-y-7">
-            {/* Sort Order Section */}
             <div>
               <div className="flex items-center gap-2 mb-3 text-linear-text-muted">
                 <SortDesc size={12} />
@@ -66,7 +64,6 @@ export function SavedFilterModal({ children }) {
               </div>
             </div>
 
-            {/* Content Type Section */}
             <div>
               <div className="flex items-center gap-2 mb-3 text-linear-text-muted">
                 <Filter size={12} />
@@ -93,7 +90,6 @@ export function SavedFilterModal({ children }) {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between gap-3 px-5 py-4 border-t border-linear-border bg-black/[0.03] dark:bg-white/[0.03]">
             <button
               onClick={() => {

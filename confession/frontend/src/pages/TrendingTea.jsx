@@ -12,11 +12,9 @@ export function TrendingTea() {
   const fetchTrending = async () => {
     setIsLoading(true);
     try {
-      // Backend uses the aggregate pipeline to calculate heat based on
-      // upvotes, comments, and time decay.
       const response = await api.get("/confessions/trending");
       if (response.data.success) {
-        setTrending(response.data.data); // Aggregate projects fields without secretCode.
+        setTrending(response.data.data);
       }
     } catch (err) {
       console.error("Trending fetch failed", err);
@@ -29,7 +27,6 @@ export function TrendingTea() {
     fetchTrending();
   }, []);
 
-  // Filter trending posts locally based on the search query
   const filteredTrending = trending.filter(
     (post) =>
       post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -38,7 +35,6 @@ export function TrendingTea() {
 
   return (
     <div className="min-h-screen bg-linear-bg text-linear-text font-sans selection:bg-black/10 dark:selection:bg-white/20">
-      {/* Header */}
       <div className="sticky top-0 z-20 bg-linear-bg/90 backdrop-blur-xl border-b border-linear-border font-poppins px-5 py-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -54,7 +50,6 @@ export function TrendingTea() {
           </p>
         </div>
 
-        {/* Search Bar */}
         <div className="relative group">
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 text-linear-text-muted group-focus-within:text-linear-text transition-colors"
@@ -78,7 +73,6 @@ export function TrendingTea() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-5 pb-24 max-w-2xl mx-auto space-y-4">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
@@ -99,7 +93,6 @@ export function TrendingTea() {
         ) : (
           filteredTrending.map((post) => (
             <div key={post._id} className="relative group">
-              {/* Optional: Add a "Hot" indicator for top 3 items */}
               {trending.indexOf(post) < 3 && !searchQuery && (
                 <div className="absolute -left-1 top-4 w-0.5 h-8 bg-orange-500 rounded-full shadow-[0_0_8px_rgba(249,115,22,0.5)] z-10" />
               )}

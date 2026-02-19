@@ -3,7 +3,6 @@ import { X, BellRing, Mail, Smartphone, Flame } from "lucide-react";
 import { useState } from "react";
 import { cn } from "../../lib/utils";
 
-// Custom Tailwind Toggle Switch
 const Toggle = ({ checked, onChange }) => (
   <button
     type="button"
@@ -27,7 +26,6 @@ const Toggle = ({ checked, onChange }) => (
 export function NotificationSettingsModal({ children }) {
   const [open, setOpen] = useState(false);
 
-  // Mock state for settings
   const [settings, setSettings] = useState({
     push: true,
     email: false,
@@ -53,7 +51,6 @@ export function NotificationSettingsModal({ children }) {
         <Dialog.Overlay className="fixed inset-0 bg-black/50 dark:bg-black/80 backdrop-blur-sm z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
 
         <Dialog.Content className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-md translate-x-[-50%] translate-y-[-50%] gap-0 border border-linear-border bg-linear-bg shadow-2xl duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-xl overflow-hidden font-sans selection:bg-black/10 dark:selection:bg-white/20">
-          {/* Header */}
           <div className="flex items-center justify-between border-b border-linear-border px-6 py-4 bg-linear-bg">
             <Dialog.Title className="text-[15px] font-semibold tracking-tight text-linear-text font-poppins">
               Notification Preferences
@@ -67,9 +64,7 @@ export function NotificationSettingsModal({ children }) {
             </Dialog.Close>
           </div>
 
-          {/* Body */}
           <div className="px-6 py-6 space-y-6 bg-linear-bg">
-            {/* Delivery Methods Section */}
             <div className="space-y-4">
               <h3 className="text-[10px] font-semibold text-linear-text-muted uppercase tracking-wider">
                 Delivery Methods
@@ -118,7 +113,6 @@ export function NotificationSettingsModal({ children }) {
 
             <div className="h-px bg-linear-border w-full" />
 
-            {/* Event Triggers Section */}
             <div className="space-y-4">
               <h3 className="text-[10px] font-semibold text-linear-text-muted uppercase tracking-wider">
                 Notify me when
@@ -164,7 +158,6 @@ export function NotificationSettingsModal({ children }) {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-end gap-3 border-t border-linear-border px-6 py-4 bg-black/[0.02] dark:bg-white/[0.02]">
             <Dialog.Close asChild>
               <button className="px-4 py-2 text-[12px] font-medium text-linear-text-muted hover:text-linear-text transition-colors rounded-md hover:bg-black/5 dark:hover:bg-white/5">

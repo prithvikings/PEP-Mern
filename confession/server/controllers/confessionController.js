@@ -6,18 +6,14 @@ export const getConfessions = async (req, res) => {
   const { page = 1, limit = 20, sort = "latest", topic, search } = req.query;
   let query = {};
 
-  // 1. Text Search Logic
   if (search) {
     query.$text = { $search: search };
   }
 
-  // 2. Exact Topic Filter (if user clicks a category tag)
   if (topic) {
     query.topic = topic;
   }
 
-  // 3. Sorting logic with Meta Score
-  // If searching, we sort by "relevance" (textScore) unless "latest" is explicitly requested
   let sortOption = { createdAt: -1 };
 
   if (search && sort === "relevance") {
@@ -28,7 +24,7 @@ export const getConfessions = async (req, res) => {
 
   const confessions = await Confession.find(
     query,
-    search ? { score: { $meta: "textScore" } } : {}, // Project score if searching
+    search ? { score: { $meta: "textScore" } } : {},
   )
     .sort(sortOption)
     .skip((page - 1) * limit)
@@ -43,7 +39,6 @@ export const getConfessions = async (req, res) => {
 };
 
 export const getTrending = async (req, res) => {
-  // We only consider posts from the last 7 days to keep it relevant
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
   const trending = await Confession.aggregate([
@@ -55,12 +50,8 @@ export const getTrending = async (req, res) => {
     },
     {
       $addFields: {
-        // Calculate hours since post
         hoursPassed: {
-          $divide: [
-            { $subtract: [new Date(), "$createdAt"] },
-            3600000, // Convert milliseconds to hours
-          ],
+          $divide: [{ $subtract: [new Date(), "$createdAt"] }, 3600000],
         },
       },
     },
@@ -69,23 +60,19 @@ export const getTrending = async (req, res) => {
         trendingScore: {
           $divide: [
             {
-              $add: [
-                "$upvotes",
-                { $multiply: ["$commentsCount", 2] },
-                1, // Base score of 1 to avoid 0
-              ],
+              $add: ["$upvotes", { $multiply: ["$commentsCount", 2] }, 1],
             },
-            { $pow: [{ $add: ["$hoursPassed", 2] }, 1.5] }, // Gravity = 1.5
+            { $pow: [{ $add: ["$hoursPassed", 2] }, 1.5] },
           ],
         },
       },
     },
     { $sort: { trendingScore: -1 } },
-    { $limit: 15 }, // Only return top 15 trending items
+    { $limit: 15 },
     {
       $project: {
-        secretCode: 0, // Never leak this
-        trendingScore: 0, // Hide the internal score from the frontend
+        secretCode: 0,
+        trendingScore: 0,
       },
     },
   ]);
@@ -172,7 +159,7 @@ export const deleteConfession = async (req, res) => {
 };
 
 export const voteConfession = async (req, res) => {
-  const { action } = req.body; // 'upvote' or 'downvote'
+  const { action } = req.body;
   const userId = req.user._id;
 
   if (!["upvote", "downvote"].includes(action))
@@ -181,7 +168,6 @@ export const voteConfession = async (req, res) => {
   const confession = await Confession.findById(req.params.id);
   if (!confession) throw new AppError("Confession not found", 404);
 
-  // Check if user has already voted
   const existingVoteIndex = confession.voters.findIndex(
     (v) => v.userId.toString() === userId.toString(),
   );
@@ -190,11 +176,9 @@ export const voteConfession = async (req, res) => {
     const existingVote = confession.voters[existingVoteIndex];
 
     if (existingVote.voteType === action) {
-      // 1. Toggle Off: Clicking the same button removes the vote
       confession[action === "upvote" ? "upvotes" : "downvotes"] -= 1;
       confession.voters.splice(existingVoteIndex, 1);
     } else {
-      // 2. Switch: Clicking the opposite button
       confession[
         existingVote.voteType === "upvote" ? "upvotes" : "downvotes"
       ] -= 1;
@@ -202,7 +186,6 @@ export const voteConfession = async (req, res) => {
       confession.voters[existingVoteIndex].voteType = action;
     }
   } else {
-    // 3. New Vote
     confession[action === "upvote" ? "upvotes" : "downvotes"] += 1;
     confession.voters.push({ userId, voteType: action });
   }
@@ -214,7 +197,6 @@ export const voteConfession = async (req, res) => {
     data: {
       upvotes: confession.upvotes,
       downvotes: confession.downvotes,
-      // Return the new state so frontend can highlight icons
       userVote:
         confession.voters.find((v) => v.userId.toString() === userId.toString())
           ?.voteType || null,

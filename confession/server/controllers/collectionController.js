@@ -3,7 +3,6 @@ import Bookmark from "../models/Bookmark.js";
 import AppError from "../utils/AppError.js";
 
 export const getCollections = async (req, res) => {
-  // Aggregate to get collections with their bookmark counts
   const collections = await Collection.aggregate([
     { $match: { userId: req.user._id } },
     {
@@ -19,7 +18,7 @@ export const getCollections = async (req, res) => {
         bookmarkCount: { $size: "$bookmarks" },
       },
     },
-    { $project: { bookmarks: 0 } }, // Remove the heavy array, keep only count
+    { $project: { bookmarks: 0 } },
     { $sort: { createdAt: -1 } },
   ]);
 
@@ -46,7 +45,6 @@ export const addBookmark = async (req, res) => {
     throw new AppError("Confession ID and Collection ID are required", 400);
   }
 
-  // Enforce uniqueness natively via the compound index we created earlier
   try {
     const bookmark = await Bookmark.create({
       userId: req.user._id,
@@ -77,7 +75,7 @@ export const getCollectionBookmarks = async (req, res) => {
     throw new AppError("Collection not found or unauthorized", 404);
 
   const bookmarks = await Bookmark.find({ collectionId })
-    .populate("confessionId") // Pulls in the full confession data
+    .populate("confessionId")
     .sort({ createdAt: -1 })
     .lean();
 
@@ -86,15 +84,14 @@ export const getCollectionBookmarks = async (req, res) => {
 
 export const getAllBookmarks = async (req, res) => {
   try {
-    // Find every bookmark belonging to this user across ALL collections
     const bookmarks = await Bookmark.find({ userId: req.user._id })
-      .populate("confessionId") // This is crucial for the ConfessionCard to work
+      .populate("confessionId")
       .sort({ createdAt: -1 })
       .lean();
 
     res.status(200).json({
       success: true,
-      data: bookmarks, // Front-end expects this array
+      data: bookmarks,
     });
   } catch (error) {
     throw new AppError("Failed to fetch all bookmarks", 500);

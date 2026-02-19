@@ -8,7 +8,6 @@ export const googleCallback = (req, res) => {
   const token = generateToken(req.user._id);
   setTokenCookie(res, token);
 
-  // Redirect based on onboarding status
   if (!req.user.isOnboarded) {
     return res.redirect(`${process.env.CLIENT_URL}/onboarding`);
   }

@@ -70,8 +70,6 @@ export const CONFESSIONS = [
   },
 ];
 
-// ... existing exports
-
 export const THREAD_DATA = {
   id: "44",
   author: "Silent Owl #44",
@@ -81,7 +79,6 @@ export const THREAD_DATA = {
 
   tags: ["WorkLife", "Confession"],
 
-  // ✅ Updated stats to match frontend
   stats: {
     likes: 1400,
     dislikes: 120,
@@ -99,7 +96,6 @@ export const THREAD_DATA = {
       content:
         "This is chaotic good energy at its finest. Does the water evaporate or just spill onto the carpet?",
 
-      // ✅ Comment votes
       votes: 124,
 
       replies: [
@@ -273,7 +269,7 @@ export const TRENDING_POSTS = [
       "I put decaf in the office pot today and watched the chaos unfold. It was purely for scientific observation, obviously.I put decaf in the office pot today and watched the chaos unfold. It was purely for scientific observation, obviously.",
     likes: 45,
     comments: 12,
-    icon: "Coffee", // We will map this to a Lucide icon
+    icon: "Coffee",
     tag: "PettyRevenge",
   },
   {
@@ -312,14 +308,14 @@ export const SAVED_POSTS = [
   {
     id: "s1",
     author: "Midnight Owl #772",
-    time: "Saved 2d ago", // Custom time format for this view
+    time: "Saved 2d ago",
     tag: "DeepThoughts",
     content:
       "Sometimes I feel like everyone else got a manual for how to be an adult and I'm just winging it based on sitcoms I watched in the 90s.",
     likes: "3.4k",
     comments: 210,
     avatarColor: "bg-indigo-900",
-    note: "Read this when feeling impostor syndrome.", // User private note
+    note: "Read this when feeling impostor syndrome.",
   },
   {
     id: "s2",

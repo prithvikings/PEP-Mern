@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; // Added useEffect to imports
+import { useState, useEffect } from "react";
 import {
   Search,
   Bookmark,
@@ -23,15 +23,12 @@ export function Saved() {
   const [bookmarks, setBookmarks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Unified fetch function
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      // 1. Always fetch collections for the navigation bar
       const colRes = await api.get("/collections");
       if (colRes.data.success) setCollections(colRes.data.data);
 
-      // 2. Fetch specific items
       const endpoint =
         activeCollectionId === "all"
           ? "/bookmarks"
@@ -39,7 +36,6 @@ export function Saved() {
 
       const bookRes = await api.get(endpoint);
 
-      // Handle data mapping based on your backend response structure
       const result =
         activeCollectionId === "all"
           ? bookRes.data.data
@@ -53,14 +49,12 @@ export function Saved() {
     }
   };
 
-  // Run whenever the active collection changes
   useEffect(() => {
     fetchData();
   }, [activeCollectionId]);
 
   return (
     <div className="min-h-screen bg-linear-bg text-linear-text font-sans selection:bg-black/10 dark:selection:bg-white/20">
-      {/* Header */}
       <div className="sticky top-0 z-20 bg-linear-bg/90 backdrop-blur-xl border-b border-linear-border font-poppins">
         <div className="px-5 pt-5 pb-4">
           <div className="flex items-center justify-between mb-5">
@@ -106,7 +100,6 @@ export function Saved() {
             </SavedFilterModal>
           </div>
 
-          {/* Collections Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
             <button
               onClick={() => setActiveCollectionId("all")}
@@ -148,7 +141,6 @@ export function Saved() {
         </div>
       </div>
 
-      {/* Content Grid */}
       <div className="p-5 pb-24 max-w-2xl mx-auto space-y-6">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3">

@@ -10,7 +10,6 @@ export function DeleteAccountModal({ children }) {
   const [confirmText, setConfirmText] = useState("");
   const [shake, setShake] = useState(false);
 
-  // Normalize the input for comparison to prevent whitespace or case issues
   const isConfirmed = confirmText.trim().toUpperCase() === "DELETE";
 
   const handleDelete = async () => {
@@ -22,13 +21,10 @@ export function DeleteAccountModal({ children }) {
 
     setIsDeleting(true);
     try {
-      // Backend Endpoint: router.delete("/users/me", requireAuth, deleteAccount)
       await api.delete("/users/me");
 
-      // Clear local storage/session if necessary
       localStorage.removeItem("token");
 
-      // Redirect to landing
       window.location.href = "/login";
     } catch (err) {
       console.error("Purge failed:", err);
@@ -56,7 +52,6 @@ export function DeleteAccountModal({ children }) {
             shake && "animate-shake",
           )}
         >
-          {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-linear-border bg-black/[0.01] dark:bg-white/[0.01]">
             <div className="flex items-center gap-2.5">
               <div className="p-1.5 rounded-md bg-red-500/10 border border-red-500/20">
@@ -95,7 +90,6 @@ export function DeleteAccountModal({ children }) {
                 </ul>
               </div>
 
-              {/* Input Well */}
               <div className="p-4 rounded-lg bg-black/[0.02] dark:bg-white/[0.02] border border-linear-border space-y-3">
                 <div className="flex items-center gap-2 text-linear-text-muted">
                   <AlertTriangle size={14} />
@@ -126,7 +120,6 @@ export function DeleteAccountModal({ children }) {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="flex flex-col gap-2.5 mt-8">
               <button
                 disabled={!isConfirmed || isDeleting}

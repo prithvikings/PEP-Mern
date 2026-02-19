@@ -19,7 +19,7 @@ export function PostOptionsMenu({
   currentContent = "",
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeModal, setActiveModal] = useState(null); // 'edit' | 'delete'
+  const [activeModal, setActiveModal] = useState(null);
 
   const [code, setCode] = useState(["", "", "", ""]);
   const [editText, setEditText] = useState(currentContent);
@@ -28,7 +28,6 @@ export function PostOptionsMenu({
 
   const menuRef = useRef(null);
 
-  // Close menu on click outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {

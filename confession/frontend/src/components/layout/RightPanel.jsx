@@ -5,7 +5,6 @@ import { cn } from "../../lib/utils";
 export function RightPanel() {
   return (
     <aside className="w-full max-w-[320px] flex-shrink-0 hidden xl:flex flex-col border-l border-linear-border bg-linear-bg h-screen p-6 overflow-y-auto sticky top-0 selection:bg-black/10 dark:selection:bg-white/20">
-      {/* Trending Topics */}
       <div className="mb-10">
         <h2 className="text-[11px] font-semibold uppercase tracking-wider mb-3 text-linear-text-muted font-poppins">
           Trending Topics
@@ -34,7 +33,6 @@ export function RightPanel() {
         </div>
       </div>
 
-      {/* Daily Top */}
       <div className="mb-10">
         <div className="bg-black/[0.02] dark:bg-white/[0.02] rounded-xl p-5 border border-linear-border group cursor-pointer hover:border-black/20 dark:hover:border-white/20 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-all duration-200">
           <div className="flex items-center gap-2.5 mb-3">
@@ -58,7 +56,6 @@ export function RightPanel() {
         </div>
       </div>
 
-      {/* Suggested */}
       <div>
         <h2 className="text-[11px] font-semibold uppercase tracking-wider mb-4 text-linear-text-muted font-poppins">
           Suggested Accounts

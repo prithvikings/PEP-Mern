@@ -5,7 +5,6 @@ import { api } from "../lib/api";
 import { cn } from "../lib/utils";
 import { useAuth } from "../context/AuthContext";
 
-// Icons & UI Components
 import { ArrowBigUpIcon } from "../components/ui/arrow-big-up";
 import { ArrowBigDownIcon } from "../components/ui/arrow-big-down";
 import { MessageCircleIcon } from "../components/ui/message-circle";
@@ -130,7 +129,6 @@ export function PostDetails() {
 
   return (
     <div className="flex flex-col min-h-screen bg-linear-bg text-linear-text font-sans selection:bg-black/10 dark:selection:bg-white/20">
-      {/* Header - Back to original clean look */}
       <div className="sticky top-0 z-20 bg-linear-bg/90 backdrop-blur-xl border-b border-linear-border px-5 py-4 flex items-center gap-4">
         <button
           onClick={() => navigate(-1)}
@@ -144,7 +142,6 @@ export function PostDetails() {
       </div>
 
       <div className="flex-1 max-w-2xl mx-auto w-full p-5 space-y-6 pb-32">
-        {/* Main Post - Restored to ConfessionCard Styling */}
         <div className="relative rounded-lg bg-linear-bg border border-linear-border p-5 shadow-sm">
           <div className="flex justify-between items-start mb-4">
             <div className="flex items-center gap-3">
@@ -212,7 +209,6 @@ export function PostDetails() {
           </div>
         </div>
 
-        {/* Discussion Area - Clean minimalist list */}
         <div className="space-y-6 pt-2">
           <div className="flex items-center gap-2 px-1">
             <span className="text-[11px] font-bold text-linear-text-muted uppercase tracking-wider">
@@ -252,7 +248,6 @@ export function PostDetails() {
         </div>
       </div>
 
-      {/* Input Bar - Restored to match Trending/Home styles */}
       <div className="sticky bottom-0 border-t border-linear-border bg-linear-bg/90 backdrop-blur-xl p-3">
         <form
           onSubmit={handlePostComment}

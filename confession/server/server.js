@@ -1,4 +1,4 @@
-import "dotenv/config"; // This executes immediately, resolving the import hoisting flaw
+import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";

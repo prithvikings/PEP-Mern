@@ -14,7 +14,7 @@ const notificationSchema = new mongoose.Schema(
     },
     message: { type: String, required: true },
     isRead: { type: Boolean, default: false },
-    linkId: { type: mongoose.Schema.Types.ObjectId }, // Optional reference to a Confession/Comment
+    linkId: { type: mongoose.Schema.Types.ObjectId },
   },
   { timestamps: true },
 );

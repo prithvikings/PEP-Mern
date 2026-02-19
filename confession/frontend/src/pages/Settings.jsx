@@ -12,7 +12,6 @@ import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../lib/api";
 
-// Import your Modals
 import { ResetCodeModal } from "../components/modals/ResetCodeModal";
 import { DeleteAccountModal } from "../components/modals/DeleteAccountModal";
 
@@ -36,13 +35,13 @@ const Toggle = ({ checked, onChange }) => (
 
 export function Settings() {
   const { theme, toggleTheme } = useTheme();
-  const { user, logout: authLogout } = useAuth(); // Assuming useAuth has a logout helper
+  const { user, logout: authLogout } = useAuth();
   const [emailNotifs, setEmailNotifs] = useState(true);
 
   const handleLogout = async () => {
     try {
       await api.post("/auth/logout");
-      authLogout(); // Clear local state and redirect to login
+      authLogout();
       window.location.href = "/login";
     } catch (err) {
       console.error("Logout failed", err);
@@ -63,7 +62,6 @@ export function Settings() {
       </div>
 
       <div className="max-w-4xl mx-auto px-6 space-y-12">
-        {/* Profile Section */}
         <section>
           <h2 className="text-[11px] font-semibold text-linear-text-muted uppercase tracking-wider mb-4">
             Profile
@@ -98,7 +96,6 @@ export function Settings() {
           </div>
         </section>
 
-        {/* Preferences Section */}
         <section>
           <h2 className="text-[11px] font-semibold text-linear-text-muted uppercase tracking-wider mb-4">
             Preferences
@@ -141,7 +138,6 @@ export function Settings() {
           </div>
         </section>
 
-        {/* Security Section */}
         <section>
           <h2 className="text-[11px] font-semibold text-linear-text-muted uppercase tracking-wider mb-4">
             Security
@@ -166,7 +162,6 @@ export function Settings() {
           </div>
         </section>
 
-        {/* Danger Zone */}
         <section>
           <h2 className="text-[11px] font-semibold text-red-500 uppercase tracking-wider mb-4">
             Danger Zone

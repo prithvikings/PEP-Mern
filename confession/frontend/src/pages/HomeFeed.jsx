@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Confetti from "react-confetti";
 import { ConfessionCard } from "../components/feed/ConfessionCard";
-import { Header } from "./Header"; // Extracted to its own file or defined below
+import { Header } from "./Header";
 import { api } from "../lib/api";
 
 export function HomeFeed() {
@@ -11,7 +11,6 @@ export function HomeFeed() {
   const [confessions, setConfessions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Centralized Filter State
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTopic, setActiveTopic] = useState("All");
   const [activeSort, setActiveSort] = useState("latest");
@@ -44,7 +43,6 @@ export function HomeFeed() {
       }
     };
 
-    // Debounce search to avoid spamming the API
     const timer = setTimeout(fetchFeed, searchQuery ? 400 : 0);
     return () => clearTimeout(timer);
   }, [searchQuery, activeTopic, activeSort]);

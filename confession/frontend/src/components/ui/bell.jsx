@@ -10,7 +10,6 @@ export const BellIcon = forwardRef(
   ({ className, size = 28, ...props }, ref) => {
     const controls = useAnimation();
 
-    // ✅ Parent controls animation
     useImperativeHandle(ref, () => ({
       startAnimation: () => controls.start("animate"),
       stopAnimation: () => controls.start("normal"),
@@ -41,7 +40,7 @@ export const BellIcon = forwardRef(
         <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
       </motion.svg>
     );
-  }
+  },
 );
 
 BellIcon.displayName = "BellIcon";

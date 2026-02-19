@@ -9,7 +9,6 @@ import { requireAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-// Initialize Google OAuth flow
 router.get(
   "/google",
   passport.authenticate("google", {
@@ -18,7 +17,6 @@ router.get(
   }),
 );
 
-// Google OAuth callback
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -28,7 +26,6 @@ router.get(
   googleCallback,
 );
 
-// Auth management
 router.post("/logout", logout);
 router.get("/me", requireAuth, getMe);
 

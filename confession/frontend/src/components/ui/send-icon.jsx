@@ -19,10 +19,8 @@ const SendIcon = forwardRef(
         { duration: 0.25, ease: "easeIn" },
       );
 
-      // instant reset
       await animate(".send-icon", { x: -24, y: 24 }, { duration: 0 });
 
-      // come back
       await animate(
         ".send-icon",
         {

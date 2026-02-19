@@ -48,7 +48,6 @@ const TRANSACTIONS = [
 export function Wallet() {
   return (
     <div className="min-h-screen bg-linear-bg text-linear-text font-sans selection:bg-black/10 dark:selection:bg-white/20 pb-24">
-      {/* Header */}
       <div className="sticky top-0 z-20 bg-linear-bg/90 backdrop-blur-xl border-b border-linear-border font-poppins">
         <div className="px-6 py-5 flex items-center justify-between">
           <div>
@@ -61,11 +60,8 @@ export function Wallet() {
       </div>
 
       <div className="p-6 max-w-4xl mx-auto space-y-10">
-        {/* Balance Overview */}
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Premium Minimalist Balance Card */}
           <div className="flex-1 p-7 rounded-2xl border border-linear-border bg-linear-bg shadow-sm flex flex-col justify-center relative overflow-hidden group">
-            {/* Subtle Texture Layer instead of gradient */}
             <div
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
               style={{
@@ -102,7 +98,6 @@ export function Wallet() {
             </div>
           </div>
 
-          {/* Value Prop Box */}
           <div className="flex-1 p-7 rounded-2xl border border-linear-border bg-black/[0.02] dark:bg-white/[0.02] flex flex-col justify-center space-y-6">
             <h3 className="text-[14px] font-bold font-poppins">
               What can I do with Coins?
@@ -145,7 +140,6 @@ export function Wallet() {
           </div>
         </div>
 
-        {/* Purchase Packages */}
         <section>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[11px] font-bold text-linear-text-muted uppercase tracking-wider font-poppins">
@@ -153,7 +147,6 @@ export function Wallet() {
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* Starter Tier */}
             <BuyCoinsModal packageAmount="100" price="$0.99">
               <div className="p-6 rounded-xl border border-linear-border bg-linear-bg flex flex-col items-center text-center hover:border-black/20 dark:hover:border-white/20 hover:shadow-md transition-all cursor-pointer group hover:-translate-y-1">
                 <div className="size-12 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center mb-4">
@@ -180,7 +173,6 @@ export function Wallet() {
               </div>
             </BuyCoinsModal>
 
-            {/* Popular Tier */}
             <BuyCoinsModal packageAmount="500" price="$3.99">
               <div className="p-6 rounded-xl border-2 border-linear-text bg-linear-bg flex flex-col items-center text-center relative cursor-pointer group shadow-lg hover:-translate-y-1 transition-transform">
                 <div className="absolute -top-3 bg-linear-text text-linear-bg text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
@@ -210,7 +202,6 @@ export function Wallet() {
               </div>
             </BuyCoinsModal>
 
-            {/* Whale Tier */}
             <BuyCoinsModal packageAmount="2,000" price="$12.99">
               <div className="p-6 rounded-xl border border-linear-border bg-linear-bg flex flex-col items-center text-center hover:border-black/20 dark:hover:border-white/20 hover:shadow-md transition-all cursor-pointer group hover:-translate-y-1">
                 <div className="size-12 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center mb-4">
@@ -242,7 +233,6 @@ export function Wallet() {
           </div>
         </section>
 
-        {/* Transaction History */}
         <section>
           <h2 className="text-[11px] font-bold text-linear-text-muted uppercase tracking-wider mb-4 font-poppins">
             Recent Transactions

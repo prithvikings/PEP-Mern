@@ -19,7 +19,6 @@ export const createComment = async (req, res) => {
 
   if (!content) throw new AppError("Comment content is required", 400);
 
-  // Atomic update to increment counter and check existence simultaneously
   const confession = await Confession.findByIdAndUpdate(confessionId, {
     $inc: { commentsCount: 1 },
   });

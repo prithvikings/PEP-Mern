@@ -11,7 +11,6 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await api.get("/auth/me");
       if (data.success) {
-        // FIXED: Your backend sends 'data: req.user', not 'user: req.user'
         setUser(data.data);
       }
     } catch (error) {

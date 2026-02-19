@@ -22,7 +22,7 @@ const confessionSchema = new mongoose.Schema(
     },
     authorAlias: { type: String, required: true },
     authorAvatar: { type: String, required: true },
-    secretCode: { type: String, required: true, select: false }, // Hashed 4-digit code
+    secretCode: { type: String, required: true, select: false },
     upvotes: { type: Number, default: 0, min: 0 },
     downvotes: { type: Number, default: 0, min: 0 },
     commentsCount: { type: Number, default: 0, min: 0 },
@@ -39,11 +39,10 @@ const confessionSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// Indexes for feeds, trending decay, and search
 confessionSchema.index({ createdAt: -1 });
 confessionSchema.index({ upvotes: -1, views: -1 });
 confessionSchema.index({ topic: 1, createdAt: -1 });
-confessionSchema.index({ content: "text" }); // Essential for regex/keyword search
+confessionSchema.index({ content: "text" });
 confessionSchema.index({ authorId: 1 });
 confessionSchema.index(
   { content: "text", topic: "text" },

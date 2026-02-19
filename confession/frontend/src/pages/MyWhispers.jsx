@@ -74,7 +74,6 @@ export function MyWhispers() {
       </div>
 
       <div className="p-8">
-        {/* FIXED 1: Removed overflow-hidden from this container so the menu isn't clipped */}
         <div className="border border-linear-border rounded-lg bg-linear-bg shadow-sm">
           <div className="grid grid-cols-[3fr_1fr_1fr_1fr_0.5fr] gap-4 px-6 py-3 border-b border-linear-border bg-black/[0.02] dark:bg-white/[0.02] text-[11px] font-semibold text-linear-text-muted uppercase tracking-wider rounded-t-lg">
             <div>Confession</div>
@@ -134,8 +133,6 @@ export function MyWhispers() {
                     {new Date(item.createdAt).toLocaleDateString()}
                   </div>
 
-                  {/* FIXED 2: Added focus-within:opacity-100 to keep the container visible while interacting */}
-                  {/* FIXED BLOCK: Permanently visible */}
                   <div
                     className="flex justify-end"
                     onClick={(e) => e.stopPropagation()}

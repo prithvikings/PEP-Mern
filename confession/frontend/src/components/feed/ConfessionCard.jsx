@@ -22,17 +22,14 @@ export function ConfessionCard({ data }) {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Local state for voting and UI feedback
   const [votes, setVotes] = useState({
     upvotes: data.upvotes || 0,
     downvotes: data.downvotes || 0,
-    // Checks if the current user has already voted based on backend voter tracking
     userVote:
       data.voters?.find((v) => v.userId === user?._id)?.voteType || null,
   });
   const [isVoting, setIsVoting] = useState(false);
 
-  // Author data mapping
   const authorAlias = data.authorAlias || data.author?.alias || "Unknown Ghost";
   const authorAvatar = data.authorAvatar || data.author?.avatarSeed;
   const isOwnPost =
@@ -52,11 +49,15 @@ export function ConfessionCard({ data }) {
   };
 
   const handleVote = async (e, type) => {
-    e.stopPropagation(); // Prevents navigating to details page on vote click
-    if (!user) return alert("Please login to vote");
-    if (isVoting) return;
+    e.stopPropagation();
+    if (!user) {
+      navigate("/login");
+      return;
+    }
 
+    if (isVoting) return;
     setIsVoting(true);
+
     try {
       const action = type === "up" ? "upvote" : "downvote";
       const response = await api.post(`/confessions/${data._id}/vote`, {
@@ -67,7 +68,7 @@ export function ConfessionCard({ data }) {
         setVotes({
           upvotes: response.data.data.upvotes,
           downvotes: response.data.data.downvotes,
-          userVote: response.data.data.userVote, // Fresh state from server
+          userVote: response.data.data.userVote,
         });
       }
     } catch (error) {
@@ -82,15 +83,12 @@ export function ConfessionCard({ data }) {
       onClick={() => navigate(`/confession/${data._id}`)}
       className="relative rounded-lg bg-linear-bg border font-sans border-linear-border p-5 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] hover:border-black/20 dark:hover:border-white/20 transition-all duration-200 cursor-pointer group"
     >
-      {/* Header Section */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
           <div
             className={cn(
               "size-8 rounded-sm flex items-center justify-center text-linear-text-muted border border-black/10 dark:border-white/10",
-              data.avatarColor
-                ? data.avatarColor
-                : "bg-black/5 dark:bg-white/5",
+              data.avatarColor || "bg-black/5 dark:bg-white/5",
             )}
           >
             {authorAvatar ? (
@@ -112,7 +110,6 @@ export function ConfessionCard({ data }) {
             </span>
           </div>
         </div>
-
         <PostOptionsMenu
           postId={data._id}
           isOwnPost={isOwnPost}
@@ -120,12 +117,10 @@ export function ConfessionCard({ data }) {
         />
       </div>
 
-      {/* Content Section */}
       <p className="text-linear-text/90 text-[13px] leading-relaxed font-poppins mb-5 text-left">
         {data.content}
       </p>
 
-      {/* Tags Section */}
       {data.topic && (
         <div className="flex items-center gap-2 mb-5">
           <span
@@ -139,7 +134,6 @@ export function ConfessionCard({ data }) {
         </div>
       )}
 
-      {/* Action Bar */}
       <div className="flex items-center justify-between pt-3 border-t border-linear-border/50">
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-3 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-full px-3 py-1">
@@ -147,11 +141,10 @@ export function ConfessionCard({ data }) {
               icon={ArrowBigUpIcon}
               label={votes.upvotes}
               onClick={(e) => handleVote(e, "up")}
-              // Highlights icon if user has upvoted
               hoverTextClass={
                 votes.userVote === "upvote"
                   ? "text-rose-500"
-                  : "hover:text-rose-500 dark:hover:text-rose-400"
+                  : "hover:text-rose-500"
               }
               iconHoverClass={
                 votes.userVote === "upvote"
@@ -164,11 +157,10 @@ export function ConfessionCard({ data }) {
               icon={ArrowBigDownIcon}
               label={votes.downvotes}
               onClick={(e) => handleVote(e, "down")}
-              // Highlights icon if user has downvoted
               hoverTextClass={
                 votes.userVote === "downvote"
                   ? "text-blue-500"
-                  : "hover:text-blue-500 dark:hover:text-blue-400"
+                  : "hover:text-blue-500"
               }
               iconHoverClass={
                 votes.userVote === "downvote"
@@ -181,7 +173,12 @@ export function ConfessionCard({ data }) {
           <div className="flex items-center gap-4">
             <InteractiveAction
               icon={MessageCircleIcon}
-              label={data.comments?.length || data.commentsCount || 0}
+              label={data.commentsCount || 0}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!user) return navigate("/login");
+                navigate(`/confession/${data._id}`);
+              }}
               hoverTextClass="hover:text-indigo-500 dark:hover:text-indigo-400"
             />
             <InteractiveAction

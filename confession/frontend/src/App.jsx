@@ -18,26 +18,21 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        {" "}
-        {/* Wraps everything inside ThemeProvider */}
         <BrowserRouter>
           <Routes>
-            {/* Public Routes */}
             <Route path="/login" element={<Login />} />
 
-            {/* Protected Routes (No layout wrapper) */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/onboarding" element={<Onboarding />} />
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<HomeFeed />} />
+              <Route path="/trending" element={<TrendingTea />} />
+              <Route path="/confession/:id" element={<PostDetails />} />
             </Route>
 
-            {/* Protected Routes (With Sidebar/RightPanel Layout) */}
             <Route element={<ProtectedRoute />}>
+              <Route path="/onboarding" element={<Onboarding />} />
               <Route element={<AppLayout />}>
-                <Route path="/" element={<HomeFeed />} />
-                <Route path="/confession/:id" element={<PostDetails />} />
                 <Route path="/my-whispers" element={<MyWhispers />} />
                 <Route path="/notifications" element={<Notifications />} />
-                <Route path="/trending" element={<TrendingTea />} />
                 <Route path="/saved" element={<Saved />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/wallet" element={<Wallet />} />

@@ -9,6 +9,7 @@ import {
   getMyWhispers,
   getWallet,
   spendCoins,
+  deleteAccount,
 } from "../controllers/userController.js";
 import {
   getCollections,
@@ -27,7 +28,6 @@ const router = express.Router();
 router.use("/auth", authRoutes);
 router.use("/confessions", confessionRoutes);
 
-// Onboarding Route
 router.post(
   "/users/onboard",
   requireAuth,
@@ -35,18 +35,16 @@ router.post(
   completeOnboarding,
 );
 
-// Comment Routes (Nested logically under confessions)
 router
   .route("/confessions/:id/comments")
   .get(getComments)
   .post(requireAuth, createComment);
 
-// User Profile & Wallet Routes
 router.get("/users/me/whispers", requireAuth, getMyWhispers);
 router.get("/users/me/wallet", requireAuth, getWallet);
+router.delete("/users/me", requireAuth, deleteAccount);
 router.post("/wallet/spend", requireAuth, spendCoins);
 
-// Collections & Bookmarks Routes
 router
   .route("/collections")
   .get(requireAuth, getCollections)

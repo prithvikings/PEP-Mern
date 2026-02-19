@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { X, CreditCard, Lock } from "lucide-react";
 import { useState } from "react";
 import { cn } from "../../lib/utils";
-import { TriangleAlertIcon } from "../ui/triangle-alert-icon"; // Using your custom icon
+import { TriangleAlertIcon } from "../ui/triangle-alert-icon";
 
 export function BuyCoinsModal({
   children,
@@ -10,17 +10,16 @@ export function BuyCoinsModal({
   price = "$3.99",
 }) {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState("form"); // "form" | "warning"
+  const [step, setStep] = useState("form");
 
   const handlePay = (e) => {
     e.preventDefault();
-    setStep("warning"); // Intercept the payment and show the joke
+    setStep("warning");
   };
 
   const handleClose = (isOpen) => {
     setOpen(isOpen);
     if (!isOpen) {
-      // Reset after a short delay so the user doesn't see the UI flip while fading out
       setTimeout(() => setStep("form"), 300);
     }
   };
@@ -50,7 +49,6 @@ export function BuyCoinsModal({
                 onSubmit={handlePay}
                 className="space-y-5 animate-in fade-in slide-in-from-bottom-2"
               >
-                {/* Order Summary */}
                 <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 p-4 rounded-lg mb-2">
                   <div>
                     <p className="text-[13px] font-bold text-linear-text">
@@ -65,7 +63,6 @@ export function BuyCoinsModal({
                   </div>
                 </div>
 
-                {/* Fake Credit Card Input */}
                 <div className="space-y-3">
                   <label className="text-[11px] font-bold text-linear-text-muted uppercase tracking-wider block">
                     Card Details
@@ -106,7 +103,6 @@ export function BuyCoinsModal({
                 </button>
               </form>
             ) : (
-              // The Reality Check State
               <div className="flex flex-col items-center justify-center text-center space-y-4 animate-in zoom-in-95 duration-300 py-6">
                 <div className="size-16 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500 mb-2">
                   <TriangleAlertIcon size={32} className="animate-pulse" />

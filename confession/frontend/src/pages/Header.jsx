@@ -12,7 +12,6 @@ export function Header({
 }) {
   const searchInputRef = useRef(null);
 
-  // Keyboard shortcut: Cmd/Ctrl + K to focus search
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -27,7 +26,6 @@ export function Header({
   return (
     <header className="sticky top-0 z-20 border-b border-linear-border bg-linear-bg/90 backdrop-blur-xl font-poppins">
       <div className="flex flex-col md:flex-row md:items-center justify-between px-5 py-4 gap-4">
-        {/* Search Input Container */}
         <div className="relative w-full max-w-md group">
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 text-linear-text-muted transition-colors group-focus-within:text-linear-text"
@@ -42,7 +40,6 @@ export function Header({
             className="w-full bg-black/5 dark:bg-white/5 border border-linear-border text-linear-text text-[13px] rounded-md py-1.5 pl-9 pr-12 focus:outline-none focus:border-linear-text/20 transition-all placeholder:text-linear-text-muted/50"
           />
 
-          {/* Action Icons: Clear button or Keyboard hint */}
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
             {searchQuery ? (
               <button
@@ -59,7 +56,6 @@ export function Header({
           </div>
         </div>
 
-        {/* Latest/Popular Sort Toggle */}
         <div className="flex items-center p-1 bg-black/5 dark:bg-white/5 border border-linear-border rounded-md self-start md:self-auto">
           {["latest", "popular"].map((tab) => (
             <button
@@ -78,7 +74,6 @@ export function Header({
         </div>
       </div>
 
-      {/* Topics Horizontal Scrollable Bar */}
       <div className="flex items-center gap-1.5 px-5 pb-4 overflow-x-auto no-scrollbar">
         {[
           "All",
