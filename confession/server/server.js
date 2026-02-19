@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import passport from "./config/passport.js";
 import routes from "./routes/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import morgan from "morgan";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
+app.use(morgan("dev"));
 
 mongoose
   .connect(process.env.MONGO_URI)

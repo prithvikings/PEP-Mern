@@ -172,19 +172,52 @@ export const deleteConfession = async (req, res) => {
 };
 
 export const voteConfession = async (req, res) => {
-  const { action } = req.body;
+  const { action } = req.body; // 'upvote' or 'downvote'
+  const userId = req.user._id;
+
   if (!["upvote", "downvote"].includes(action))
     throw new AppError("Invalid action", 400);
 
-  const incrementField =
-    action === "upvote" ? { upvotes: 1 } : { downvotes: 1 };
+  const confession = await Confession.findById(req.params.id);
+  if (!confession) throw new AppError("Confession not found", 404);
 
-  const confession = await Confession.findByIdAndUpdate(
-    req.params.id,
-    { $inc: incrementField },
-    { new: true },
+  // Check if user has already voted
+  const existingVoteIndex = confession.voters.findIndex(
+    (v) => v.userId.toString() === userId.toString(),
   );
 
-  if (!confession) throw new AppError("Confession not found", 404);
-  res.status(200).json({ success: true, data: confession });
+  if (existingVoteIndex > -1) {
+    const existingVote = confession.voters[existingVoteIndex];
+
+    if (existingVote.voteType === action) {
+      // 1. Toggle Off: Clicking the same button removes the vote
+      confession[action === "upvote" ? "upvotes" : "downvotes"] -= 1;
+      confession.voters.splice(existingVoteIndex, 1);
+    } else {
+      // 2. Switch: Clicking the opposite button
+      confession[
+        existingVote.voteType === "upvote" ? "upvotes" : "downvotes"
+      ] -= 1;
+      confession[action === "upvote" ? "upvotes" : "downvotes"] += 1;
+      confession.voters[existingVoteIndex].voteType = action;
+    }
+  } else {
+    // 3. New Vote
+    confession[action === "upvote" ? "upvotes" : "downvotes"] += 1;
+    confession.voters.push({ userId, voteType: action });
+  }
+
+  await confession.save();
+
+  res.status(200).json({
+    success: true,
+    data: {
+      upvotes: confession.upvotes,
+      downvotes: confession.downvotes,
+      // Return the new state so frontend can highlight icons
+      userVote:
+        confession.voters.find((v) => v.userId.toString() === userId.toString())
+          ?.voteType || null,
+    },
+  });
 };

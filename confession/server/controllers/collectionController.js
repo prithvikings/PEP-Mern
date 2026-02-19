@@ -83,3 +83,20 @@ export const getCollectionBookmarks = async (req, res) => {
 
   res.status(200).json({ success: true, data: { collection, bookmarks } });
 };
+
+export const getAllBookmarks = async (req, res) => {
+  try {
+    // Find every bookmark belonging to this user across ALL collections
+    const bookmarks = await Bookmark.find({ userId: req.user._id })
+      .populate("confessionId") // This is crucial for the ConfessionCard to work
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      data: bookmarks, // Front-end expects this array
+    });
+  } catch (error) {
+    throw new AppError("Failed to fetch all bookmarks", 500);
+  }
+};

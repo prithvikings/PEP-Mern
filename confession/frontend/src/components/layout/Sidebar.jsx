@@ -1,6 +1,6 @@
 import { Plus, MoreVertical, Coffee } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 import { Home } from "../ui/home";
 import { Flame } from "../ui/flame";
@@ -11,10 +11,36 @@ import WalletIcon from "../ui/wallet-icon";
 
 import { cn } from "../../lib/utils";
 import { CreateConfessionModal } from "../modals/CreateConfessionModal";
+import { useAuth } from "../../context/AuthContext";
+import { api } from "../../lib/api";
 
 export function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth(); // Get real user data
+
+  // State for dynamic counts
+  const [whisperCount, setWhisperCount] = useState(0);
+  const [savedCount, setSavedCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        // Fetching whispers count
+        const whisperRes = await api.get("/users/me/whispers");
+        if (whisperRes.data.success)
+          setWhisperCount(whisperRes.data.data.length);
+
+        // Fetching bookmarks count
+        const savedRes = await api.get("/bookmarks");
+        if (savedRes.data.success) setSavedCount(savedRes.data.data.length);
+      } catch (err) {
+        console.error("Failed to fetch sidebar counts:", err);
+      }
+    };
+
+    if (user) fetchCounts();
+  }, [user]);
 
   const navItems = [
     { icon: Home, label: "Home Feed", path: "/" },
@@ -23,15 +49,20 @@ export function Sidebar() {
       icon: MessageCircleIcon,
       label: "My Whispers",
       path: "/my-whispers",
-      count: 12,
+      count: whisperCount, // Real dynamic count
     },
     {
       icon: BellIcon,
       label: "Notifications",
       path: "/notifications",
-      count: 3,
+      // Notification count removed as requested
     },
-    { icon: BookmarkIcon, label: "Saved", path: "/saved" },
+    {
+      icon: BookmarkIcon,
+      label: "Saved",
+      path: "/saved",
+      count: savedCount, // Implemented count for Saved
+    },
     { icon: WalletIcon, label: "Wallet", path: "/wallet" },
   ];
 
@@ -94,7 +125,7 @@ export function Sidebar() {
                   {item.label}
                 </span>
 
-                {item.count && (
+                {item.count !== undefined && item.count > 0 && (
                   <span
                     className={cn(
                       "ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded-sm font-medium",
@@ -114,7 +145,6 @@ export function Sidebar() {
 
       {/* Bottom Section */}
       <div className="p-3 border-t border-linear-border flex flex-col gap-3">
-        {/* New Confession Button */}
         <CreateConfessionModal>
           <button className="flex w-full items-center justify-center gap-2 rounded-md bg-linear-text text-linear-bg hover:opacity-90 py-2 px-3 shadow-sm transition-opacity text-[13px] font-semibold cursor-pointer">
             <Plus size={16} />
@@ -122,7 +152,7 @@ export function Sidebar() {
           </button>
         </CreateConfessionModal>
 
-        {/* User Profile */}
+        {/* Real User Profile */}
         <div
           onClick={() => navigate("/settings")}
           className={cn(
@@ -132,30 +162,37 @@ export function Sidebar() {
               : "hover:bg-black/5 dark:hover:bg-white/5",
           )}
         >
-          {/* Avatar */}
+          {/* Real Avatar */}
           <div className="relative">
-            <div className="size-8 rounded-md bg-linear-border overflow-hidden border border-black/10 dark:border-white/10">
-              <div className="size-full bg-gradient-to-tr from-purple-500/20 to-blue-500/20" />
+            <div className="size-8 rounded-md bg-linear-border overflow-hidden border border-black/10 dark:border-white/10 flex items-center justify-center">
+              {user?.avatarSeed ? (
+                <img
+                  src={`https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${user.avatarSeed}&backgroundColor=transparent`}
+                  alt="My Avatar"
+                  className="size-full object-contain p-1"
+                />
+              ) : (
+                <div className="size-full bg-gradient-to-tr from-purple-500/20 to-blue-500/20" />
+              )}
             </div>
             <div className="absolute -bottom-1 -right-1 size-3 bg-emerald-500 rounded-full border-2 border-linear-bg"></div>
           </div>
 
-          {/* User Info */}
-          <div className="flex flex-col text-left">
+          {/* Real User Info */}
+          <div className="flex flex-col text-left overflow-hidden">
             <span
               className={cn(
-                "text-[13px] text-linear-text",
+                "text-[13px] text-linear-text truncate w-32",
                 isSettingsActive ? "font-semibold" : "font-medium",
               )}
             >
-              Ghost User #99
+              {user?.alias || "Ghost User"}
             </span>
             <span className="text-[11px] text-linear-text-muted">
-              Anonymous
+              {user?.role || "Anonymous"}
             </span>
           </div>
 
-          {/* More Icon */}
           <MoreVertical
             size={16}
             className={cn(

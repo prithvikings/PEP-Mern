@@ -1,13 +1,9 @@
 import { Coffee, ShieldCheck } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 export function Login() {
-  const navigate = useNavigate();
-
   const handleGoogleLogin = () => {
-    // Mock login action
-    console.log("Initiating Google OAuth...");
-    navigate("/onboarding");
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+    window.location.href = `${apiUrl}/auth/google`;
   };
 
   return (

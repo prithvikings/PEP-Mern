@@ -29,6 +29,12 @@ const confessionSchema = new mongoose.Schema(
     views: { type: Number, default: 0, min: 0 },
     status: { type: String, enum: ["Public", "Private"], default: "Public" },
     isPremiumBlurred: { type: Boolean, default: false },
+    voters: [
+      {
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        voteType: { type: String, enum: ["upvote", "downvote"] },
+      },
+    ],
   },
   { timestamps: true },
 );

@@ -1,17 +1,18 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PawPrint, Zap, Moon } from "lucide-react";
-
 import { ArrowBigUpIcon } from "../ui/arrow-big-up";
 import { ArrowBigDownIcon } from "../ui/arrow-big-down";
 import { MessageCircleIcon } from "../ui/message-circle";
 import { CircleDollarSignIcon as BadgeDollarSignIcon } from "../ui/circle-dollar-sign";
 import { PostOptionsMenu } from "../modals/post-options-menu";
-
-// IMPORT THIS ONCE.
 import { InteractiveAction } from "../ui/interactive-action";
 import { cn } from "../../lib/utils";
+import { useAuth } from "../../context/AuthContext";
+import { api } from "../../lib/api";
 
 const AvatarIcon = ({ name }) => {
+  if (!name) return <Zap size={14} />;
   if (name.includes("Tiger")) return <PawPrint size={14} />;
   if (name.includes("Owl")) return <Moon size={14} />;
   return <Zap size={14} />;
@@ -19,6 +20,23 @@ const AvatarIcon = ({ name }) => {
 
 export function ConfessionCard({ data }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Local state for voting and UI feedback
+  const [votes, setVotes] = useState({
+    upvotes: data.upvotes || 0,
+    downvotes: data.downvotes || 0,
+    // Checks if the current user has already voted based on backend voter tracking
+    userVote:
+      data.voters?.find((v) => v.userId === user?._id)?.voteType || null,
+  });
+  const [isVoting, setIsVoting] = useState(false);
+
+  // Author data mapping
+  const authorAlias = data.authorAlias || data.author?.alias || "Unknown Ghost";
+  const authorAvatar = data.authorAvatar || data.author?.avatarSeed;
+  const isOwnPost =
+    user && (data.authorId === user._id || data.author?._id === user._id);
 
   const getTagStyles = (tag) => {
     switch (tag) {
@@ -33,11 +51,38 @@ export function ConfessionCard({ data }) {
     }
   };
 
+  const handleVote = async (e, type) => {
+    e.stopPropagation(); // Prevents navigating to details page on vote click
+    if (!user) return alert("Please login to vote");
+    if (isVoting) return;
+
+    setIsVoting(true);
+    try {
+      const action = type === "up" ? "upvote" : "downvote";
+      const response = await api.post(`/confessions/${data._id}/vote`, {
+        action,
+      });
+
+      if (response.data.success) {
+        setVotes({
+          upvotes: response.data.data.upvotes,
+          downvotes: response.data.data.downvotes,
+          userVote: response.data.data.userVote, // Fresh state from server
+        });
+      }
+    } catch (error) {
+      console.error("Voting failed:", error);
+    } finally {
+      setIsVoting(false);
+    }
+  };
+
   return (
     <div
-      onClick={() => navigate(`/confession/${data.id}`)}
+      onClick={() => navigate(`/confession/${data._id}`)}
       className="relative rounded-lg bg-linear-bg border font-sans border-linear-border p-5 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] hover:border-black/20 dark:hover:border-white/20 transition-all duration-200 cursor-pointer group"
     >
+      {/* Header Section */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
           <div
@@ -48,70 +93,100 @@ export function ConfessionCard({ data }) {
                 : "bg-black/5 dark:bg-white/5",
             )}
           >
-            <AvatarIcon name={data.author} />
+            {authorAvatar ? (
+              <img
+                src={`https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${authorAvatar}&backgroundColor=transparent`}
+                alt="Avatar"
+                className="size-full object-contain p-1"
+              />
+            ) : (
+              <AvatarIcon name={authorAlias} />
+            )}
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <h3 className="text-linear-text font-medium text-[13px]">
-                {data.author}
-              </h3>
-            </div>
+          <div className="flex flex-col text-left">
+            <h3 className="text-linear-text font-medium text-[13px]">
+              {authorAlias}
+            </h3>
             <span className="text-linear-text-muted text-[11px]">
-              {data.time}
+              {new Date(data.createdAt).toLocaleDateString()}
             </span>
           </div>
         </div>
-        {/* REPLACED DEAD BUTTON WITH ACTUAL MENU COMPONENT */}
+
         <PostOptionsMenu
-          postId={data.id}
-          isOwnPost={data.author === "Ghost User #99"}
+          postId={data._id}
+          isOwnPost={isOwnPost}
+          currentContent={data.content}
         />
       </div>
 
-      <p className="text-linear-text/90 text-[13px] leading-relaxed font-poppins mb-5">
+      {/* Content Section */}
+      <p className="text-linear-text/90 text-[13px] leading-relaxed font-poppins mb-5 text-left">
         {data.content}
       </p>
 
-      {data.tag && (
+      {/* Tags Section */}
+      {data.topic && (
         <div className="flex items-center gap-2 mb-5">
           <span
             className={cn(
               "text-[11px] px-2 py-0.5 rounded-sm border font-medium",
-              getTagStyles(data.tag),
+              getTagStyles(data.topic),
             )}
           >
-            #{data.tag}
+            #{data.topic}
           </span>
         </div>
       )}
 
+      {/* Action Bar */}
       <div className="flex items-center justify-between pt-3 border-t border-linear-border/50">
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-3 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-full px-3 py-1">
             <InteractiveAction
               icon={ArrowBigUpIcon}
-              label={data.likes}
-              hoverTextClass="hover:text-rose-500 dark:hover:text-rose-400"
-              iconHoverClass="group-hover:fill-rose-500/20"
+              label={votes.upvotes}
+              onClick={(e) => handleVote(e, "up")}
+              // Highlights icon if user has upvoted
+              hoverTextClass={
+                votes.userVote === "upvote"
+                  ? "text-rose-500"
+                  : "hover:text-rose-500 dark:hover:text-rose-400"
+              }
+              iconHoverClass={
+                votes.userVote === "upvote"
+                  ? "fill-rose-500/20 text-rose-500"
+                  : "group-hover:fill-rose-500/20"
+              }
             />
             <div className="w-px h-3 bg-black/10 dark:bg-white/10" />
             <InteractiveAction
               icon={ArrowBigDownIcon}
-              label={data.dislikes}
-              hoverTextClass="hover:text-blue-500 dark:hover:text-blue-400"
-              iconHoverClass="group-hover:fill-blue-500/20"
+              label={votes.downvotes}
+              onClick={(e) => handleVote(e, "down")}
+              // Highlights icon if user has downvoted
+              hoverTextClass={
+                votes.userVote === "downvote"
+                  ? "text-blue-500"
+                  : "hover:text-blue-500 dark:hover:text-blue-400"
+              }
+              iconHoverClass={
+                votes.userVote === "downvote"
+                  ? "fill-blue-500/20 text-blue-500"
+                  : "group-hover:fill-blue-500/20"
+              }
             />
           </div>
 
           <div className="flex items-center gap-4">
             <InteractiveAction
               icon={MessageCircleIcon}
-              label={data.comments}
+              label={data.comments?.length || data.commentsCount || 0}
               hoverTextClass="hover:text-indigo-500 dark:hover:text-indigo-400"
             />
             <InteractiveAction
               icon={BadgeDollarSignIcon}
-              label={data.dollarCoin}
+              label={data.dollarCoin || 0}
               hoverTextClass="hover:text-emerald-500 dark:hover:text-emerald-400"
             />
           </div>

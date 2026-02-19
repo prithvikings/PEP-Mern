@@ -22,12 +22,7 @@ const router = express.Router();
 router
   .route("/")
   .get(getConfessions)
-  .post(
-    requireAuth,
-    postLimiter,
-    validateBody(createConfessionSchema),
-    createConfession,
-  );
+  .post(requireAuth, validateBody(createConfessionSchema), createConfession);
 
 router.get("/trending", getTrending);
 

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Ghost, Sparkles, Check, ChevronRight, Dices } from "lucide-react";
 import { cn } from "../lib/utils";
+import { api } from "../lib/api";
+import { useAuth } from "../context/AuthContext";
 
 const INTERESTS = [
   "Work Drama",
@@ -16,18 +18,17 @@ const INTERESTS = [
 
 export function Onboarding() {
   const navigate = useNavigate();
+  const { fetchUser } = useAuth();
+
   const [alias, setAlias] = useState("");
   const [selectedInterests, setSelectedInterests] = useState([]);
-
-  // Initialize with a random seed for the avatar
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [avatarSeed, setAvatarSeed] = useState("");
 
-  // Generate initial seed on mount to avoid hydration mismatches if using SSR
   useEffect(() => {
     setAvatarSeed(Math.random().toString(36).substring(7));
   }, []);
 
-  // DiceBear API URL (Using 'bottts-neutral' for anonymous robotic avatars)
   const avatarUrl = `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${avatarSeed}&backgroundColor=transparent`;
 
   const generateNewAvatar = () => {
@@ -41,17 +42,31 @@ export function Onboarding() {
         : [...prev, interest],
     );
   };
+  const handleComplete = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await api.post("/users/onboard", {
+        alias,
+        interests: selectedInterests,
+        avatarSeed,
+      });
 
-  const handleComplete = () => {
-    console.log("Profile created:", { alias, selectedInterests, avatarUrl });
-    navigate("/", { state: { showConfetti: true } });
+      if (response.data.success) {
+        await fetchUser();
+        navigate("/", { state: { showConfetti: true }, replace: true });
+      }
+    } catch (error) {
+      console.error("Failed to save profile:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const isFormValid = alias.trim().length > 2 && selectedInterests.length > 0;
+  const isFormValid =
+    alias.trim().length > 2 && selectedInterests.length > 0 && !isSubmitting;
 
   return (
     <div className="min-h-screen bg-linear-bg text-linear-text font-sans flex flex-col selection:bg-black/10 dark:selection:bg-white/20">
-      {/* Top Bar */}
       <div className="w-full border-b border-linear-border px-6 py-4 flex items-center justify-between">
         <span className="font-poppins font-bold tracking-tight text-[15px]">
           TeaTeller
@@ -63,7 +78,6 @@ export function Onboarding() {
 
       <div className="flex-1 flex flex-col items-center justify-center p-6">
         <div className="w-full max-w-md space-y-10">
-          {/* Header */}
           <div className="text-center">
             <h1 className="text-2xl font-semibold tracking-tight font-poppins mb-2">
               Create your alter ego
@@ -74,7 +88,6 @@ export function Onboarding() {
             </p>
           </div>
 
-          {/* Step 1: Avatar Selection */}
           <div className="flex flex-col items-center gap-4">
             <div className="relative size-24 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center p-3 shadow-sm">
               {avatarSeed && (
@@ -94,7 +107,6 @@ export function Onboarding() {
             </button>
           </div>
 
-          {/* Step 2: Alias */}
           <div className="space-y-3">
             <label className="text-[11px] font-bold text-linear-text-muted uppercase tracking-wider flex items-center gap-2">
               <Ghost size={14} />
@@ -115,7 +127,6 @@ export function Onboarding() {
             </div>
           </div>
 
-          {/* Step 3: Interests */}
           <div className="space-y-3">
             <label className="text-[11px] font-bold text-linear-text-muted uppercase tracking-wider flex items-center gap-2">
               <Sparkles size={14} />
@@ -143,18 +154,19 @@ export function Onboarding() {
             </div>
           </div>
 
-          {/* Action */}
           <div className="pt-4 border-t border-linear-border">
             <button
               onClick={handleComplete}
               disabled={!isFormValid}
               className="w-full flex items-center justify-center gap-2 bg-linear-text text-linear-bg py-3 rounded-lg text-[14px] font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed shadow-sm group"
             >
-              Enter the Void
-              <ChevronRight
-                size={16}
-                className="group-hover:translate-x-1 transition-transform"
-              />
+              {isSubmitting ? "Entering the Void..." : "Enter the Void"}
+              {!isSubmitting && (
+                <ChevronRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              )}
             </button>
           </div>
         </div>

@@ -90,3 +90,19 @@ export const completeOnboarding = async (req, res) => {
     data: updatedUser,
   });
 };
+
+export const deleteAccount = async (req, res) => {
+  const userId = req.user._id;
+
+  // 1. Delete all user data
+  await Promise.all([
+    Confession.deleteMany({ authorId: userId }),
+    Bookmark.deleteMany({ userId: userId }),
+    User.findByIdAndDelete(userId),
+  ]);
+
+  // 2. Clear Cookie
+  res.cookie("jwt", "", { expires: new Date(0) });
+
+  res.status(200).json({ success: true, message: "Account deleted" });
+};

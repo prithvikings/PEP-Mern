@@ -15,6 +15,7 @@ import {
   createCollection,
   addBookmark,
   getCollectionBookmarks,
+  getAllBookmarks,
 } from "../controllers/collectionController.js";
 import { completeOnboarding } from "../controllers/userController.js";
 import { onboardingSchema } from "../validations/index.js";
@@ -50,7 +51,7 @@ router
   .route("/collections")
   .get(requireAuth, getCollections)
   .post(requireAuth, createCollection);
-
+router.get("/bookmarks", requireAuth, getAllBookmarks);
 router.get("/collections/:id/bookmarks", requireAuth, getCollectionBookmarks);
 router.post("/bookmarks", requireAuth, addBookmark);
 
